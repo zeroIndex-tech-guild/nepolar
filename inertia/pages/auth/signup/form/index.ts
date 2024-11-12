@@ -1,44 +1,58 @@
-import { Field } from "~/components/form-builder";
-import z from 'zod';
+import { Field } from '~/components/form-builder'
+import z from 'zod'
 import { zodResolver } from '@hookform/resolvers/zod'
 
 export const signupFields: Field[] = [
   {
-    name: "email",
-    type: "email",
-    label: "Email",
-    placeholder: "nepali@nepolar.com"
+    name: 'fullName',
+    type: 'text',
+    label: 'Full Name',
+    placeholder: 'Uzumaki Naruto',
   },
   {
-    name: "password",
-    type: "password",
-    label: "Password",
-    placeholder: "********"
+    name: 'email',
+    type: 'email',
+    label: 'Email',
+    placeholder: 'nepali@nepolar.com',
   },
   {
-    name: "confirm_password",
-    type: "password",
-    label: "Confirm Password",
-    placeholder: "********"
-  }
+    name: 'password',
+    type: 'password',
+    label: 'Password',
+    placeholder: '********',
+  },
+  {
+    name: 'confirmPassword',
+    type: 'password',
+    label: 'Confirm Password',
+    placeholder: '********',
+  },
 ]
 
-const ZSignupSchema = z.object({
-  email: z.string().email({
-    message: "Please enter a valid email."
-  }),
-  password: z.string(),
-  confirm_password: z.string()
-}).refine((data) => data.password === data.confirm_password, {
-  message: "Passwords do not match",
-  path: ["confirm_password"]
-})
-
+const ZSignupSchema = z
+  .object({
+    fullName: z.string().min(1, {
+      message: 'Please enter your full name.',
+    }),
+    email: z.string().email({
+      message: 'Please enter a valid email.',
+    }),
+    password: z.string().min(8, {
+      message: 'Password must be at least 8 characters.',
+    }),
+    confirmPassword: z.string().min(8, {
+      message: 'Confirm your password.',
+    }),
+  })
+  .refine((data) => data.password === data.confirmPassword, {
+    message: 'Passwords do not match',
+    path: ['confirm_password'],
+  })
 
 export const defaultValues = {
-  email: "",
-  password: "",
-  confirm_password: ""
+  email: '',
+  password: '',
+  confirmPassword: '',
 }
 
 export const resolver = zodResolver(ZSignupSchema)

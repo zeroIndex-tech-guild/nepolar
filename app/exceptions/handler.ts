@@ -30,6 +30,7 @@ export default class HttpExceptionHandler extends ExceptionHandler {
    * response to the client
    */
   async handle(error: unknown, ctx: HttpContext) {
+    //return ctx.response.status(500).send({ error: 'error' })
     return super.handle(error, ctx)
   }
 

@@ -10,11 +10,52 @@
 import router from '@adonisjs/core/services/router'
 router.on('/').renderInertia('home/index')
 
-//router.on('/auth/login').renderInertia('auth/login').as('login')
+const RegisterController = () => import('#controllers/auth/register_controller')
+const LoginController = () => import('#controllers/auth/login_controller')
+const LogoutController = () => import('#controllers/auth/logout_controller')
 
-const AuthController = () => import("#controllers/auth_controller")
-router.group(() => {
-  router.get("/auth/login", [AuthController, 'renderLoginPage']).as("login_page");
+//router
+//  .group(() => {
+//    router.get('/login', [AuthController, 'renderLoginPage']).as('login_page')
+//
+//    router.get('/signup', [AuthController, 'renderSignupPage']).as('signup_page')
+//  })
+//  .prefix('/auth')
+//
+//router
+//  .group(() => {
+//    router.post('/signup', [AuthController, 'signupUser']).as('signup')
+//    router.post('/login', [AuthController, 'loginUser']).as('login')
+//    router.post('/logout', [LogoutController, 'handle']).as('logout')
+//  })
+//  .prefix('/api/auth')
+//
 
-  router.get("/auth/signup", [AuthController, 'renderSignupPage']).as("signup_page");
-})
+/*
+|--------------------------------------------------------------------------
+| View Routes :)
+|--------------------------------------------------------------------------
+|
+| For rendering view
+*/
+router
+  .group(() => {
+    router.get('/signup', [RegisterController, 'show']).as('signup_page')
+    router.get('/login', [LoginController, 'show']).as('login_page')
+  })
+  .as('auth')
+
+/*
+|--------------------------------------------------------------------------
+| API Routes :)
+|--------------------------------------------------------------------------
+|
+| For registering routes endpoints
+*/
+
+router
+  .group(() => {
+    router.post('/signup', [RegisterController, 'create']).as('signup')
+    router.post('/login', [LoginController, 'create']).as('login')
+  })
+  .prefix('/api/auth')
