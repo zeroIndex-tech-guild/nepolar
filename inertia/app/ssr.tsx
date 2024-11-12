@@ -10,8 +10,10 @@ export default function render(page: any) {
       const pages = import.meta.glob('../pages/**/*.tsx', { eager: true })
       return pages[`../pages/${name}.tsx`]
     },
-    setup: ({ App, props }) => <QueryProvider>
-      <App {...props} />
-    </QueryProvider>,
+    setup: ({ App, props }) => (
+      <QueryProvider>
+        <App {...props} />
+      </QueryProvider>
+    ),
   })
 }
