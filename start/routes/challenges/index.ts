@@ -1,23 +1,24 @@
 import router from '@adonisjs/core/services/router'
 
-const ChallengeController = () => import('#controllers/challenge/challenges_controller')
+const ChallengeListController = () => import('#controllers/challenge/challenges_list_controller')
+
+const ChallengeDetailController = () =>
+  import('#controllers/challenge/challenges_detail_controller')
 
 export const challangesRoutes = router
   .group(() => {
-    router.get('/challenges', [ChallengeController, 'show']).as('challenges_page')
+    router.get('', [ChallengeListController, 'show']).as('challenges_page')
+
+    router.get('/:challengeId', [ChallengeDetailController, 'show']).as('challenge_detail_page')
 
     router
       .group(() => {
-        router.get('', [ChallengeController, 'findAll']).as('get')
+        router.get('', [ChallengeListController, 'findAll']).as('get')
 
-        router.post('', [ChallengeController, 'create']).as('create')
-
-        router.get('/:challengeId', [ChallengeController, 'read']).as('read')
-
-        router.put('/:challengeId', [ChallengeController, 'update']).as('update')
-
-        router.delete('/:challengeId', [ChallengeController, 'delete']).as('delete')
+        router.post('', [ChallengeListController, 'create']).as('create')
       })
-      .prefix('api/challenges')
+      .prefix('api')
+      .as('challenges-api')
   })
+  .prefix('challenges')
   .as('challenge')

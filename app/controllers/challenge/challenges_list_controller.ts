@@ -61,13 +61,5 @@ export default class ChallengesController {
     }
   }
 
-  async read({}: HttpContext) {}
-
-  async update({}: HttpContext) {}
-
-  async delete({}: HttpContext) {}
-
   async findAll({}: HttpContext) {}
-
-  async findOne({}: HttpContext) {}
 }
