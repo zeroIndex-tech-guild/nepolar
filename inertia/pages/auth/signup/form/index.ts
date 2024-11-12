@@ -50,6 +50,7 @@ const ZSignupSchema = z
   })
 
 export const defaultValues = {
+  fullName: '',
   email: '',
   password: '',
   confirmPassword: '',

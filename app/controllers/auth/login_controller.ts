@@ -7,7 +7,7 @@ export default class LoginController {
     return inertia.render('auth/login/index')
   }
 
-  async create({ request, response, auth }: HttpContext) {
+  async create({ request, response, auth, inertia }: HttpContext) {
     const payload = await request.validateUsing(loginValidator)
 
     const { email, password } = payload
@@ -17,7 +17,7 @@ export default class LoginController {
 
       await auth.use('web').login(user)
 
-      return response.redirect().toRoute('/')
+      return response.redirect().toRoute('home')
     } catch (error) {
       return response.status(401).send({
         success: false,

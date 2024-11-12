@@ -5,6 +5,7 @@ import { resolver, defaultValues, TSignupValues, signupFields } from './form'
 import { FieldsGenerator } from '~/components/form-builder'
 import { Button } from '~/components/ui/button'
 import { useSignup } from './hooks/useSignup'
+import { Link } from '@inertiajs/react'
 
 export default function SignupPage() {
   const form = useForm({
@@ -34,6 +35,8 @@ export default function SignupPage() {
               </Button>
             </form>
           </Form>
+
+          <Link href="/login">Already have an account? Login</Link>
         </CardContent>
       </Card>
     </div>

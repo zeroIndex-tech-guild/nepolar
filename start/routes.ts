@@ -8,7 +8,7 @@
 */
 
 import router from '@adonisjs/core/services/router'
-router.on('/').renderInertia('home/index')
+router.on('/').renderInertia('home/index').as('home')
 
 const RegisterController = () => import('#controllers/auth/register_controller')
 const LoginController = () => import('#controllers/auth/login_controller')
