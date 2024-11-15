@@ -32,11 +32,11 @@ export default class extends BaseSeeder {
           name,
         })
 
-        createdChallenge.related('user').associate(user!)
-
-        createdChallenge.related('logs').createMany(logs)
-
-        createdChallenge.related('tags').createMany(tags)
+        //createdChallenge.related('user').associate(user!)
+        //
+        //createdChallenge.related('logs').createMany(logs)
+        //
+        //createdChallenge.related('tags').createMany(tags)
       }
     }
   }

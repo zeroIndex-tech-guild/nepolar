@@ -1,13 +1,26 @@
 import User from '#models/user'
 import { loginValidator } from '#validators/auth/login'
-import { Redirect, type HttpContext } from '@adonisjs/core/http'
+import { type HttpContext } from '@adonisjs/core/http'
 
 export default class LoginController {
-  async show({ inertia }: HttpContext) {
-    return inertia.render('auth/login/index')
+  async show({ inertia, auth }: HttpContext) {
+    const { isAuthenticated } = auth
+    try {
+      await auth.authenticate()
+      const user = auth.user
+
+      const props = {
+        user,
+        isAuthenticated,
+      }
+
+      return inertia.render('auth/login/index', props)
+    } catch (error) {
+      return inertia.render('auth/login/index')
+    }
   }
 
-  async create({ request, response, auth, inertia }: HttpContext) {
+  async login({ request, response, auth }: HttpContext) {
     const payload = await request.validateUsing(loginValidator)
 
     const { email, password } = payload
@@ -17,7 +30,12 @@ export default class LoginController {
 
       await auth.use('web').login(user)
 
-      return response.redirect().toRoute('home')
+      return response.status(200).send({
+        success: true,
+        message: 'Login successful',
+        error: null,
+        data: { user },
+      })
     } catch (error) {
       return response.status(401).send({
         success: false,

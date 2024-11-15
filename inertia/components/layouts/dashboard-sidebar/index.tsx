@@ -31,7 +31,7 @@ export const DashboardSidebar = () => {
                   {points.map((point) => {
                     const { url, title, Icon } = point
                     return (
-                      <SidebarMenuItem>
+                      <SidebarMenuItem key={url}>
                         <Link href={url} className="">
                           {<Icon />}
                           {title}

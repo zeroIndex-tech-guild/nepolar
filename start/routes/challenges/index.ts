@@ -5,20 +5,30 @@ const ChallengeListController = () => import('#controllers/challenge/challenges_
 const ChallengeDetailController = () =>
   import('#controllers/challenge/challenges_detail_controller')
 
-export const challangesRoutes = router
+//export const challangesRoutes = router
+//  .group(() => {
+//    router
+//      .group(() => {})
+//      .prefix('api')
+//      .as('challenges-api')
+//  })
+//  .prefix('challenges')
+//  .as('challenge')
+
+export const challengesAPIRoutes = router
   .group(() => {
-    router.get('', [ChallengeListController, 'show']).as('challenges_page')
+    router.get('', [ChallengeListController, 'findAll']).as('get')
 
-    router.get('/:challengeId', [ChallengeDetailController, 'show']).as('challenge_detail_page')
-
-    router
-      .group(() => {
-        router.get('', [ChallengeListController, 'findAll']).as('get')
-
-        router.post('', [ChallengeListController, 'create']).as('create')
-      })
-      .prefix('api')
-      .as('challenges-api')
+    router.post('', [ChallengeListController, 'create']).as('create')
   })
-  .prefix('challenges')
-  .as('challenge')
+  .prefix('/api/challenges')
+  .as('challenges-api')
+
+export const challengesViewRoutes = router
+  .group(() => {
+    router.get('', [ChallengeListController, 'show']).as('list_page')
+
+    router.get('/:challengeId', [ChallengeDetailController, 'show']).as('detail_page')
+  })
+  .prefix('/challenges')
+  .as('challenges')

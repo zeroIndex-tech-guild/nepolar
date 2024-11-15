@@ -13,6 +13,6 @@ router
 router
   .group(() => {
     router.post('/signup', [RegisterController, 'create']).as('signup')
-    router.post('/login', [LoginController, 'create']).as('login')
+    router.post('/login', [LoginController, 'login']).as('login')
   })
   .prefix('/api/auth')

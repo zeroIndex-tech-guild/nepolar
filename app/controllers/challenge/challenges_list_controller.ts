@@ -3,8 +3,18 @@ import { createChallengeValidator } from '#validators/challenge/create'
 import type { HttpContext } from '@adonisjs/core/http'
 
 export default class ChallengesController {
-  async show({ inertia }: HttpContext) {
-    return inertia.render('challenges/index')
+  async show({ inertia, auth }: HttpContext) {
+    const r = await auth.authenticate()
+
+    const { user, isAuthenticated } = auth
+
+    const props = {
+      user,
+      isAuthenticated,
+      r,
+    }
+
+    return inertia.render('challenges/index', props)
   }
 
   async create({ request, response, auth }: HttpContext) {

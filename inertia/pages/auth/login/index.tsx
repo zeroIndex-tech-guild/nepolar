@@ -5,19 +5,24 @@ import { resolver, defaultValues, TLoginValues, loginFields } from './form'
 import { FieldsGenerator } from '~/components/form-builder'
 import { Button } from '~/components/ui/button'
 import { useLogin } from './hooks/useLogin'
-import { Link, router } from '@inertiajs/react'
+import { Link, router, usePage } from '@inertiajs/react'
 
 export default function SignupPage() {
   const form = useForm({
     defaultValues,
     resolver,
   })
+  const pp = usePage()
+  console.log({ pp })
 
   const { login } = useLogin()
 
   const onHandleSubmit: SubmitHandler<TLoginValues> = async (data) => {
-    await login(data)
-    router.replace('/')
+    const response = await login(data, {
+      onSuccess: () => {
+        router.replace('/dashboard')
+      },
+    })
   }
 
   return (
