@@ -9,7 +9,9 @@ export default class extends BaseSchema {
 
       table.string('name')
       table.integer('days')
-      table.integer('userId')
+      table.text('description')
+
+      table.integer('user_id').unsigned().references('users.id').onDelete('CASCADE')
 
       table.timestamp('created_at')
       table.timestamp('updated_at')
