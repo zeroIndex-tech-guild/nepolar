@@ -1,8 +1,9 @@
-import { ColumnDef } from '@tanstack/react-table'
+import { ColumnDef, Row } from '@tanstack/react-table'
 import dayjs from 'dayjs'
 import { DataTable } from '~/components/ui/data-table'
 import { formatDate } from '~/lib/date-format'
 import { Challenge } from '~/types/challenge'
+import { router } from '@inertiajs/react'
 
 type Props = {
   data: Challenge[]
@@ -41,7 +42,19 @@ const columns: ColumnDef<Challenge>[] = [
 
 export const ChallengesTable = (props: Props) => {
   const { data = [] } = props
+
+  const onRowClick = (row: Row<Challenge>) => {
+    const route = `/challenges/${row.original.id}`
+    router.get(route)
+  }
+
   return (
-    <DataTable data={data} columns={columns} filter="name" filterPlaceholder="Search Challenges" />
+    <DataTable
+      data={data}
+      columns={columns}
+      filter="name"
+      filterPlaceholder="Search Challenges"
+      onRowClick={onRowClick}
+    />
   )
 }
