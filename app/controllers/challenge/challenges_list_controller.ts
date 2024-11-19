@@ -3,32 +3,11 @@ import { createChallengeValidator } from '#validators/challenge/create'
 import type { HttpContext } from '@adonisjs/core/http'
 
 export default class ChallengesController {
-  async show({ inertia, auth }: HttpContext) {
-    const r = await auth.authenticate()
-
-    const { user, isAuthenticated } = auth
-
-    const props = {
-      user,
-      isAuthenticated,
-      r,
-    }
-
-    return inertia.render('challenges/index', props)
+  async show({ inertia }: HttpContext) {
+    return inertia.render('challenges/index')
   }
 
   async create({ request, response, auth }: HttpContext) {
-    if (!auth.isAuthenticated) {
-      return response.status(401).send({
-        success: false,
-        message: 'Please login to create a new challenge.',
-        error: {
-          message: 'Please login to create a new challenge.',
-        },
-        data: null,
-      })
-    }
-
     try {
       const payload = await request.validateUsing(createChallengeValidator)
 
@@ -71,5 +50,37 @@ export default class ChallengesController {
     }
   }
 
-  async findAll({}: HttpContext) {}
+  async findAll({ auth }: HttpContext) {
+    const user = auth.user
+
+    if (!user) {
+      return {
+        success: false,
+        message: "Couldn't fetch challenges at the moment.",
+        error: {
+          message: "Couldn't fetch challenges at the moment.",
+        },
+        data: null,
+      }
+    }
+
+    try {
+      const challenges = await Challenge.findManyBy({ user_id: user?.id })
+      return {
+        success: true,
+        message: 'Challenges fetched successfully.',
+        error: null,
+        data: challenges,
+      }
+    } catch (error) {
+      return {
+        success: false,
+        message: "Couldn't fetch challenges at the moment.",
+        error: {
+          error,
+        },
+        data: null,
+      }
+    }
+  }
 }

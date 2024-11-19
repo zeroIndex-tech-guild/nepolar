@@ -1,3 +1,4 @@
+import { middleware } from '#start/kernel'
 import router from '@adonisjs/core/services/router'
 
 const ChallengeListController = () => import('#controllers/challenge/challenges_list_controller')
@@ -5,24 +6,17 @@ const ChallengeListController = () => import('#controllers/challenge/challenges_
 const ChallengeDetailController = () =>
   import('#controllers/challenge/challenges_detail_controller')
 
-//export const challangesRoutes = router
-//  .group(() => {
-//    router
-//      .group(() => {})
-//      .prefix('api')
-//      .as('challenges-api')
-//  })
-//  .prefix('challenges')
-//  .as('challenge')
-
 export const challengesAPIRoutes = router
   .group(() => {
-    router.get('', [ChallengeListController, 'findAll']).as('get')
-
     router.post('', [ChallengeListController, 'create']).as('create')
+
+    router.get('/:challengeId', [ChallengeDetailController, 'read']).as('read')
+
+    router.get('', [ChallengeListController, 'findAll']).as('findAll')
   })
   .prefix('/api/challenges')
   .as('challenges-api')
+  .use(middleware.auth())
 
 export const challengesViewRoutes = router
   .group(() => {
@@ -32,3 +26,4 @@ export const challengesViewRoutes = router
   })
   .prefix('/challenges')
   .as('challenges')
+  .use(middleware.auth())
