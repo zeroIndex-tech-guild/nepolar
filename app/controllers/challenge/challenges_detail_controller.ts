@@ -33,7 +33,7 @@ export default class ChallengesController {
     return inertia.render('challenges/create/index', {
       challenge: null,
       isEditPage: false,
-      challengeId: 'create',
+      challengeId: 'new',
     })
   }
 
@@ -49,6 +49,7 @@ export default class ChallengesController {
     }
     return inertia.render('challenges/detail/index', {
       challenge,
+      challengeId,
     })
   }
 

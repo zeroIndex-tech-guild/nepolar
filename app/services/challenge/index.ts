@@ -51,7 +51,7 @@ export class ChallengeService {
 
   async findOne(challengeId: string) {
     try {
-      const challenge = await Challenge.findOrFail(challengeId)
+      const challenge = await Challenge.query().preload('logs').where('id', challengeId).first()
       return {
         challenge,
         error: null,

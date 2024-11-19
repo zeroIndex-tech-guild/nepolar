@@ -13,6 +13,9 @@ export default class Log extends BaseModel {
   @column()
   declare content: string
 
+  @column()
+  declare challengeId: number
+
   @belongsTo(() => Challenge)
   declare challenge: BelongsTo<typeof Challenge>
 
