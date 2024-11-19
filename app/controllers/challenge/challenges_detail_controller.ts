@@ -10,30 +10,45 @@ import { StatusCodes } from 'http-status-codes'
 export default class ChallengesController {
   constructor(protected challengeService: ChallengeService) {}
 
-  async show({ inertia, params }: HttpContext) {
+  async edit({ inertia, params }: HttpContext) {
     const { challengeId } = params as { challengeId: string }
     const isEditPage = challengeId !== 'create'
 
-    if (isEditPage) {
-      const { challenge, error } = await this.challengeService.findOne(challengeId)
+    const { challenge, error } = await this.challengeService.findOne(challengeId)
 
-      if (error !== null) {
-        console.log({ error })
-        return inertia.render('challenges/create/index', {
-          params,
-        })
-      }
+    if (error !== null) {
+      console.log({ error })
       return inertia.render('challenges/create/index', {
-        challenge,
-        isEditPage,
-        challengeId,
+        params,
       })
     }
-
     return inertia.render('challenges/create/index', {
-      challenge: null,
+      challenge,
       isEditPage,
       challengeId,
+    })
+  }
+
+  async new({ inertia }: HttpContext) {
+    return inertia.render('challenges/create/index', {
+      challenge: null,
+      isEditPage: false,
+      challengeId: 'create',
+    })
+  }
+
+  async detail({ inertia, params }: HttpContext) {
+    const { challengeId } = params as { challengeId: string }
+    const { challenge, error } = await this.challengeService.findOne(challengeId)
+
+    if (error !== null) {
+      console.log({ error })
+      return inertia.render('challenges/create/index', {
+        params,
+      })
+    }
+    return inertia.render('challenges/detail/index', {
+      challenge,
     })
   }
 

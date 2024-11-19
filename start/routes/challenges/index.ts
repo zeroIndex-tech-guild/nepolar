@@ -24,9 +24,17 @@ export const challengesAPIRoutes = router
 
 export const challengesViewRoutes = router
   .group(() => {
+    // shows the list of challenges
     router.get('', [ChallengeListController, 'show']).as('list_page')
 
-    router.get('/:challengeId', [ChallengeDetailController, 'show']).as('detail_page')
+    // creates a new challenge
+    //router.get('/new', [ChallengeDetailController, 'new']).as('create_page')
+
+    // shows the challenge detail
+    router.get('/:challengeId', [ChallengeDetailController, 'detail']).as('detail_page')
+
+    // edit the challenge
+    router.get('/:challengeId/edit', [ChallengeDetailController, 'edit']).as('edit_page')
   })
   .prefix('/challenges')
   .as('challenges')
