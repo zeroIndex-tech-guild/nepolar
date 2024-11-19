@@ -1,10 +1,11 @@
 import { useMutation } from '@tanstack/react-query'
-import { TChallengeForm } from '../forms'
 import { axiosInstance } from '~/components/providers/axios-provider'
+import { TChallengeForm } from '~/pages/challenges/create/forms'
+import { CHALLENGES_QK } from './query-key'
 
 export const useCreateChallenge = () => {
   const mutate = useMutation({
-    mutationKey: ['challenges'],
+    mutationKey: [CHALLENGES_QK],
     mutationFn: async (data: TChallengeForm) => {
       return await axiosInstance.post('/challenges', data)
     },

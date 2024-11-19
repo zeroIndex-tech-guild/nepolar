@@ -1,5 +1,6 @@
 import Challenge from '#models/challenge'
 import { createChallengeValidator } from '#validators/challenge/create'
+import { getAllChallengeValidator } from '#validators/challenge/getAll'
 import type { HttpContext } from '@adonisjs/core/http'
 import { StatusCodes } from 'http-status-codes'
 
@@ -55,8 +56,9 @@ export default class ChallengesController {
     }
   }
 
-  async findAll({ auth }: HttpContext) {
+  async findAll({ auth, request }: HttpContext) {
     const user = auth.user
+    const { page, limit, orderBy } = await request.validateUsing(getAllChallengeValidator)
 
     if (!user) {
       return {
@@ -70,7 +72,12 @@ export default class ChallengesController {
     }
 
     try {
-      const challenges = await Challenge.findManyBy({ user_id: user?.id })
+      //const challenges = await Challenge.findManyBy({ user_id: user?.id })
+      const challenges = await Challenge.query()
+        .where('user_id', user?.id)
+        .orderBy('created_at', 'desc')
+        .paginate(page, limit)
+
       return {
         success: true,
         message: 'Challenges fetched successfully.',

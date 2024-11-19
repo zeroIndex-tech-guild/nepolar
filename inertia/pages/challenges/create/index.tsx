@@ -4,8 +4,8 @@ import { Form } from '~/components/ui/form'
 import { challengeFormFields, defaultValues, resolver, TChallengeForm } from './forms'
 import { useForm } from 'react-hook-form'
 import { Button } from '~/components/ui/button'
-import { useCreateChallenge } from './hooks/useCreateChallenge'
 import { Link, router } from '@inertiajs/react'
+import { useCreateChallenge } from '~/hooks/challenges/useCreateChallenge'
 
 type PageProps = {
   params: {
