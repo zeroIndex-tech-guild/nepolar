@@ -12,7 +12,7 @@ export default class RegisterController {
     try {
       const payload = await request.validateUsing(registrationValidator)
 
-      const { password, confirmPassword } = payload
+      const { password, confirmPassword, ...rest } = payload
 
       if (password !== confirmPassword) {
         return response.status(400).send({
@@ -25,10 +25,8 @@ export default class RegisterController {
         })
       }
 
-      const { fullName, email } = payload
       const user = await User.create({
-        fullName,
-        email,
+        ...rest,
         password,
       })
 

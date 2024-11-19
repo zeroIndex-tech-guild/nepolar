@@ -1,0 +1,9 @@
+openapi: 3.0.0
+info:
+  title: Dummy API
+  description: A placeholder OpenAPI specification file.
+  version: 1.0.0
+servers:
+  - url: https://api.example.com
+    description: Production server
+paths: {}

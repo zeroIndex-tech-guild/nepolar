@@ -8,8 +8,9 @@
 */
 
 import router from '@adonisjs/core/services/router'
-import './routes/challenges/index.js'
+
 import './routes/auth/index.js'
+import './routes/challenges/index.js'
 
 router.on('/').renderInertia('home/index').as('home')
 
