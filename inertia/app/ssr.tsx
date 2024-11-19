@@ -1,6 +1,7 @@
 import ReactDOMServer from 'react-dom/server'
 import { createInertiaApp } from '@inertiajs/react'
 import { QueryProvider } from '~/components/providers/query-provider'
+import { Toaster } from 'sonner'
 
 export default function render(page: any) {
   return createInertiaApp({
@@ -12,6 +13,7 @@ export default function render(page: any) {
     },
     setup: ({ App, props }) => (
       <QueryProvider>
+        <Toaster richColors />
         <App {...props} />
       </QueryProvider>
     ),

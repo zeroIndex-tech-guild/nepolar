@@ -4,6 +4,7 @@ import { NepoarResponse } from '../../lib/nepolar-response.js'
 import { updateChallengeValidator } from '#validators/challenge/update'
 import { inject } from '@adonisjs/core'
 import { ChallengeService } from '#services/challenge/index'
+import { StatusCodes } from 'http-status-codes'
 
 @inject()
 export default class ChallengesController {
@@ -25,12 +26,14 @@ export default class ChallengesController {
       return inertia.render('challenges/create/index', {
         challenge,
         isEditPage,
+        challengeId,
       })
     }
 
     return inertia.render('challenges/create/index', {
       challenge: null,
       isEditPage,
+      challengeId,
     })
   }
 
@@ -65,7 +68,7 @@ export default class ChallengesController {
     }
   }
 
-  async delete({ request }: HttpContext) {
+  async delete({ request, response }: HttpContext) {
     const challengeId = request.param('challengeId')
 
     try {
@@ -74,7 +77,9 @@ export default class ChallengesController {
       const message = `Challenge deleted: ${challenge.name}`
       return NepoarResponse.success(challenge, message)
     } catch (error) {
-      return NepoarResponse.failure(error, "Challenge couldn't be deleted.")
+      return response
+        .status(StatusCodes.NOT_MODIFIED)
+        .json(NepoarResponse.failure(error, "Challenge couldn't be deleted."))
     }
   }
 }

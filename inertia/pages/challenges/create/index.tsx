@@ -9,14 +9,16 @@ import { useCreateChallenge } from '~/hooks/challenges/useCreateChallenge'
 import { Challenge } from '~/types/challenge'
 import { userUpdateChallenge } from '~/hooks/challenges/useUpdateChallenge'
 import { toast } from 'sonner'
+import { DeleteChallengeAlert } from '../components/delete-challenge-alert'
 
 type PageProps = {
   challenge: Challenge
   isEditPage: boolean
+  challengeId: string
 }
 
 export default function SingleChallengePage(props: PageProps) {
-  const { challenge, isEditPage } = props
+  const { challenge, isEditPage, challengeId } = props
 
   const form = useForm({
     defaultValues: isEditPage
@@ -66,7 +68,11 @@ export default function SingleChallengePage(props: PageProps) {
       <Form {...form}>
         <form onSubmit={form.handleSubmit(onSubmitHandler)}>
           <FieldsGenerator fields={challengeFormFields} form={form} />
-          <LoadingButton isLoading={isLoading}>{buttonLabel}</LoadingButton>
+          <div className="flex gap-4 items-center">
+            <LoadingButton isLoading={isLoading}>{buttonLabel}</LoadingButton>
+
+            {isEditPage && <DeleteChallengeAlert challengeId={challengeId} />}
+          </div>
         </form>
       </Form>
     </div>

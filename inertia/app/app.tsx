@@ -23,7 +23,7 @@ createInertiaApp({
     hydrateRoot(
       el,
       <QueryProvider>
-        <Toaster richColors={true} />
+        <Toaster richColors />
         <App {...props} />
       </QueryProvider>
     )
