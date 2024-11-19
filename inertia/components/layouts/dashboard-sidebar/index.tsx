@@ -23,7 +23,7 @@ export const DashboardSidebar = () => {
           const { label, points } = sidebarItem
 
           return (
-            <SidebarGroup>
+            <SidebarGroup key={label}>
               <SidebarGroupLabel>{label}</SidebarGroupLabel>
 
               <SidebarContent>

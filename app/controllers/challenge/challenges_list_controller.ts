@@ -5,8 +5,20 @@ import type { HttpContext } from '@adonisjs/core/http'
 import { StatusCodes } from 'http-status-codes'
 
 export default class ChallengesController {
-  async show({ inertia }: HttpContext) {
-    return inertia.render('challenges/index')
+  async show({ inertia, auth }: HttpContext) {
+    const user = auth.user
+
+    if (!user) {
+      return inertia.render('auth/login')
+    }
+
+    const challenges = await Challenge.query()
+      .where('user_id', user.id)
+      .orderBy('created_at', 'desc')
+
+    return inertia.render('challenges/index', {
+      challenges,
+    })
   }
 
   async create({ request, response, auth }: HttpContext) {
