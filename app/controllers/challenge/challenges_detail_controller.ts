@@ -11,18 +11,25 @@ export default class ChallengesController {
 
   async show({ inertia, params }: HttpContext) {
     const { challengeId } = params as { challengeId: string }
-    const { challenge, error } = await this.challengeService.findOne(challengeId)
-
     const isEditPage = challengeId !== 'create'
 
-    if (error !== null) {
-      console.log({ error })
+    if (isEditPage) {
+      const { challenge, error } = await this.challengeService.findOne(challengeId)
+
+      if (error !== null) {
+        console.log({ error })
+        return inertia.render('challenges/create/index', {
+          params,
+        })
+      }
       return inertia.render('challenges/create/index', {
-        params,
+        challenge,
+        isEditPage,
       })
     }
+
     return inertia.render('challenges/create/index', {
-      challenge,
+      challenge: null,
       isEditPage,
     })
   }

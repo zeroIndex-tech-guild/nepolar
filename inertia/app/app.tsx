@@ -6,6 +6,7 @@ import { hydrateRoot } from 'react-dom/client'
 import { createInertiaApp } from '@inertiajs/react'
 import { resolvePageComponent } from '@adonisjs/inertia/helpers'
 import { QueryProvider } from '~/components/providers/query-provider'
+import { Toaster } from 'sonner'
 
 const appName = import.meta.env.VITE_APP_NAME || 'AdonisJS'
 
@@ -22,6 +23,7 @@ createInertiaApp({
     hydrateRoot(
       el,
       <QueryProvider>
+        <Toaster richColors={true} />
         <App {...props} />
       </QueryProvider>
     )

@@ -2,6 +2,8 @@ import { DashboardLayout } from '~/components/layouts/dashboard'
 import { Challenge } from '~/types/challenge'
 import { PaginationMeta } from '~/types/pagination-meta'
 import { ChallengesTable } from './components/challenges-table'
+import { Button } from '~/components/ui/button'
+import { Link } from '@inertiajs/react'
 
 type Props = {
   challenges: {
@@ -17,8 +19,13 @@ export default function ChallengePage(props: Props) {
 
   return (
     <div className="">
-      <h1 className="text-3xl">Challenges</h1>
+      <h1 className="text-3xl mb-4">Challenges</h1>
 
+      <div>
+        <Button variant="outline" className="">
+          <Link href="/challenges/create">Create Challenge</Link>
+        </Button>
+      </div>
       <ChallengesTable data={data} />
     </div>
   )

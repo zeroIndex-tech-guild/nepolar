@@ -3,11 +3,12 @@ import { DashboardLayout } from '~/components/layouts/dashboard'
 import { Form } from '~/components/ui/form'
 import { challengeFormFields, ChallengeFormValues, defaultValues, resolver } from './forms'
 import { SubmitHandler, useForm } from 'react-hook-form'
-import { Button } from '~/components/ui/button'
+import { Button, LoadingButton } from '~/components/ui/button'
 import { router } from '@inertiajs/react'
 import { useCreateChallenge } from '~/hooks/challenges/useCreateChallenge'
 import { Challenge } from '~/types/challenge'
 import { userUpdateChallenge } from '~/hooks/challenges/useUpdateChallenge'
+import { toast } from 'sonner'
 
 type PageProps = {
   challenge: Challenge
@@ -28,41 +29,44 @@ export default function SingleChallengePage(props: PageProps) {
   })
 
   const { createChallenge, createChallengeIsLoading } = useCreateChallenge()
-  const { updateChallenge, updateChallengeIsLoading } = userUpdateChallenge(challenge.id || '')
+  const { updateChallenge, updateChallengeIsLoading } = userUpdateChallenge(challenge?.id || '')
 
   const buttonLabel = isEditPage ? 'Update Challenge' : 'Create Challenge'
 
   const onSubmitHandler: SubmitHandler<ChallengeFormValues> = async (data) => {
     if (isEditPage) {
-      const response = await updateChallenge(data, {
-        onError: (error) => {
-          console.log(error)
+      await updateChallenge(data, {
+        onError: () => {
+          toast.error('Something went wrong. Please try again.')
         },
-        onSuccess: (data) => {
-          console.log({ data })
+        onSuccess: () => {
+          toast.success('Challenge updated successfully.')
         },
       })
-      console.log({ response })
+
+      return
     }
 
-    const response = await createChallenge(data, {
-      onError: (error) => {
-        console.log(error)
+    await createChallenge(data, {
+      onError: () => {
+        toast.error('Something went wrong. Please try again.')
       },
       onSuccess: (data) => {
         console.log({ data })
+        toast.success('Challenge created successfully.')
+        router.visit(`/challenges/${data.data.data.id}`)
       },
     })
-
-    console.log({ response })
   }
+
+  const isLoading = updateChallengeIsLoading || createChallengeIsLoading
 
   return (
     <div>
       <Form {...form}>
         <form onSubmit={form.handleSubmit(onSubmitHandler)}>
           <FieldsGenerator fields={challengeFormFields} form={form} />
-          <Button>{buttonLabel}</Button>
+          <LoadingButton isLoading={isLoading}>{buttonLabel}</LoadingButton>
         </form>
       </Form>
     </div>

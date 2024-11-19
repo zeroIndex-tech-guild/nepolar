@@ -69,12 +69,9 @@ export default class ChallengesController {
       return response.status(500).json(error_response)
     }
 
-    return response.safeStatus(StatusCodes.CREATED).json({
-      days,
-      name,
-      tags,
-      challenge,
-    })
+    return response
+      .safeStatus(StatusCodes.CREATED)
+      .json(NepoarResponse.success(challenge, 'Challenge created successfully.'))
   }
 
   async findAll({ auth, request, response }: HttpContext) {
