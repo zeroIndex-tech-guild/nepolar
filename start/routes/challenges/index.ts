@@ -10,9 +10,13 @@ export const challengesAPIRoutes = router
   .group(() => {
     router.post('', [ChallengeListController, 'create']).as('create')
 
+    router.get('', [ChallengeListController, 'findAll']).as('findAll')
+
     router.get('/:challengeId', [ChallengeDetailController, 'read']).as('read')
 
-    router.get('', [ChallengeListController, 'findAll']).as('findAll')
+    router.put('/:challengeId', [ChallengeDetailController, 'update']).as('update')
+
+    router.delete('/:challengeId', [ChallengeDetailController, 'delete']).as('delete')
   })
   .prefix('/api/challenges')
   .as('challenges-api')

@@ -30,7 +30,7 @@
     "#tests/*": "./tests/*.js",
     "#start/*": "./start/*.js",
     "#config/*": "./config/*.js",
-    "#endpoints/*": "./app/endpoints/*.js",
+    "#endpoints": "./app/endpoints/index.js",
     "#errorCode": "./app/constants/error-code.js",
     "#types/*": "./types/*.js"
   },
@@ -87,6 +87,7 @@
     "class-variance-authority": "^0.7.0",
     "clsx": "^2.1.1",
     "edge.js": "^6.2.0",
+    "http-status-codes": "^2.3.0",
     "lucide-react": "^0.453.0",
     "luxon": "^3.5.0",
     "pg": "^8.13.1",

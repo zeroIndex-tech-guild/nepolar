@@ -15,6 +15,12 @@ export default class Challenge extends BaseModel {
   @column()
   declare days: number
 
+  @column()
+  declare description: string
+
+  @column()
+  declare userId: number
+
   @belongsTo(() => User)
   declare user: BelongsTo<typeof User>
 

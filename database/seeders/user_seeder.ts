@@ -1,16 +1,19 @@
 import { BaseSeeder } from '@adonisjs/lucid/seeders'
 import User from '#models/user'
+import { john } from '#tests/functional/auth/data'
+
+// @ts-ignore
+delete john.confirmPassword
 
 const data = [
+  john,
   {
-    id: 1,
     fullName: 'Haru Yoshida',
     userName: 'haru',
     email: 'haru@nepolar.com',
     password: 'rootroot',
   },
   {
-    id: 2,
     fullName: 'Sora Kato',
     userName: 'sora',
     email: 'sora@nepolar.com',

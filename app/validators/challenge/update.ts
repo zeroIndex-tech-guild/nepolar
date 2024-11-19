@@ -1,9 +1,3 @@
-import vine from '@vinejs/vine'
+import { createChallengeValidator } from './create.js'
 
-export const updateChallengeValidator = vine.compile(
-  vine.object({
-    name: vine.string().minLength(3),
-    days: vine.number(),
-    tags: vine.array(vine.string()),
-  })
-)
+export const updateChallengeValidator = createChallengeValidator

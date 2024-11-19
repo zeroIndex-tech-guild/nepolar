@@ -7,11 +7,11 @@ export default class extends BaseSchema {
     this.schema.createTable(this.tableName, (table) => {
       table.increments('id')
 
-      table.string('name')
-      table.integer('days')
-      table.text('description')
+      table.string('name').notNullable()
+      table.integer('days').notNullable()
+      table.text('description').notNullable()
 
-      table.integer('user_id').unsigned().references('users.id').onDelete('CASCADE')
+      table.integer('user_id').unsigned().references('users.id').onDelete('CASCADE').notNullable()
 
       table.timestamp('created_at')
       table.timestamp('updated_at')

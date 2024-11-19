@@ -1,6 +1,7 @@
 import Challenge from '#models/challenge'
 import { createChallengeValidator } from '#validators/challenge/create'
 import type { HttpContext } from '@adonisjs/core/http'
+import { StatusCodes } from 'http-status-codes'
 
 export default class ChallengesController {
   async show({ inertia }: HttpContext) {
@@ -11,19 +12,23 @@ export default class ChallengesController {
     try {
       const payload = await request.validateUsing(createChallengeValidator)
 
-      const { days, name, tags } = payload
+      const { days, name, tags, description } = payload
+
+      const user = auth.user
 
       const challenge = await Challenge.create({
         days,
         name,
+        description,
+        userId: user?.id,
       })
 
-      return {
+      return response.safeStatus(StatusCodes.CREATED).json({
         days,
         name,
         tags,
         challenge,
-      }
+      })
     } catch (error) {
       let error_response = {
         success: false,
@@ -36,7 +41,7 @@ export default class ChallengesController {
       }
 
       if (error.code === 'E_VALIDATION_ERROR') {
-        response.status(error.staus).json({
+        response.status(error.status).json({
           success: false,
           message: 'Please provide valid and required data.',
           error: {
