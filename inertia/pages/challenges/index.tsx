@@ -1,10 +1,27 @@
 import { DashboardLayout } from '~/components/layouts/dashboard'
+import { Challenge } from '~/types/challenge'
+import { PaginationMeta } from '~/types/pagination-meta'
+import { ChallengesTable } from './components/challenges-table'
 
-type Props = {}
+type Props = {
+  challenges: {
+    data: Challenge[]
+    meta: PaginationMeta
+  }
+}
 
 export default function ChallengePage(props: Props) {
-  console.log({ props })
-  return <h1>helo world of challenge</h1>
+  const {
+    challenges: { data },
+  } = props
+
+  return (
+    <div className="container mx-auto p-6 flexy-1">
+      <h1 className="text-3xl">Challenges</h1>
+
+      <ChallengesTable data={data} />
+    </div>
+  )
 }
 
 ChallengePage.layout = (page: React.ReactNode) => <DashboardLayout>{page}</DashboardLayout>

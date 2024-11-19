@@ -15,7 +15,7 @@ export default class ChallengesController {
 
     const { page = 1, limit = 25, orderBy = 'desc' } = request.qs()
 
-    const { challenges, error } = await this.challengeService.findAll({
+    const { challenges = [], error } = await this.challengeService.findAll({
       userId: user?.id,
       page,
       limit,
