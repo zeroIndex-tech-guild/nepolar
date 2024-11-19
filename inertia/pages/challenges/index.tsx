@@ -16,7 +16,7 @@ export default function ChallengePage(props: Props) {
   } = props
 
   return (
-    <div className="container mx-auto p-6 flexy-1">
+    <div className="">
       <h1 className="text-3xl">Challenges</h1>
 
       <ChallengesTable data={data} />

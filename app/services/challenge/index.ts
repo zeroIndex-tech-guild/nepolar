@@ -48,4 +48,19 @@ export class ChallengeService {
       }
     }
   }
+
+  async findOne(challengeId: string) {
+    try {
+      const challenge = await Challenge.findOrFail(challengeId)
+      return {
+        challenge,
+        error: null,
+      }
+    } catch (error) {
+      return {
+        challenge: null,
+        error,
+      }
+    }
+  }
 }

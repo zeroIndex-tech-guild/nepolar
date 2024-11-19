@@ -3,17 +3,17 @@ import { axiosInstance } from '~/components/providers/axios-provider'
 import { ChallengeFormValues } from '~/pages/challenges/create/forms'
 import { CHALLENGES_QK } from './query-key'
 
-export const useCreateChallenge = () => {
+export const userUpdateChallenge = (challengeId: string) => {
   const mutate = useMutation({
     mutationKey: [CHALLENGES_QK],
     mutationFn: async (data: ChallengeFormValues) => {
-      return await axiosInstance.post('/challenges', data)
+      return await axiosInstance.put('/challenges/' + challengeId, data)
     },
   })
 
   return {
-    createChallenge: mutate.mutateAsync,
-    createChallengeIsLoading: mutate.isPending,
-    createChallengeMutate: mutate,
+    updateChallenge: mutate.mutateAsync,
+    updateChallengeIsLoading: mutate.isPending,
+    updateChallengeMutate: mutate,
   }
 }

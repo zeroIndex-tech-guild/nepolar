@@ -1,13 +1,15 @@
-import { InputHTMLAttributes } from 'react'
 import { ControllerRenderProps, UseFormReturn } from 'react-hook-form'
 import { FormControl, FormField, FormItem, FormLabel, FormMessage } from '~/components/ui/form'
 import { Input } from '~/components/ui/input'
+import { MDXEditor } from '../ui/mdx-editor'
+import { DevTool } from '@hookform/devtools'
+import env from '#start/env'
 
 type TInputElField = {
   name: string
   label: string
   placeholder: string
-  type: 'text' | 'email' | 'password' | 'number'
+  type: 'text' | 'email' | 'password' | 'number' | 'textarea' | 'mdx'
   required?: boolean
 }
 
@@ -79,15 +81,40 @@ export const FieldGenerator = (props: FieldGeneratorProps) => {
           )}
         />
       )
+    case 'mdx':
+      return (
+        <FormField
+          control={control}
+          name={name}
+          render={({ field }) => (
+            <FormItem>
+              <FormLabel>{field.label}</FormLabel>
+              <FormControl>
+                <MDXEditor
+                  markdown={field.value}
+                  onChange={field.onChange}
+                  imageDropHandler={async () => ''}
+                />
+              </FormControl>
+              <FormMessage className="text-red-500" />
+            </FormItem>
+          )}
+        />
+      )
     default:
-      throw new Error('Field type not supported')
+      const message = `Field type ${type} not supported`
+      throw new Error(message)
   }
 }
 
 export const FieldsGenerator = (props: { fields: Field[]; form: UseFormReturn<any> }) => {
   const { fields, form } = props
+  //const isDev = env.get('NODE_ENV') === 'development'
+  const isDev = true
+
   return (
     <>
+      {isDev && <DevTool control={form.control} />}
       {fields.map((field) => (
         <FieldGenerator key={field.name} field={field} form={form} />
       ))}

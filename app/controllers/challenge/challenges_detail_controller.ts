@@ -2,11 +2,28 @@ import Challenge from '#models/challenge'
 import type { HttpContext } from '@adonisjs/core/http'
 import { NepoarResponse } from '../../lib/nepolar-response.js'
 import { updateChallengeValidator } from '#validators/challenge/update'
+import { inject } from '@adonisjs/core'
+import { ChallengeService } from '#services/challenge/index'
 
+@inject()
 export default class ChallengesController {
+  constructor(protected challengeService: ChallengeService) {}
+
   async show({ inertia, params }: HttpContext) {
+    const { challengeId } = params as { challengeId: string }
+    const { challenge, error } = await this.challengeService.findOne(challengeId)
+
+    const isEditPage = challengeId !== 'create'
+
+    if (error !== null) {
+      console.log({ error })
+      return inertia.render('challenges/create/index', {
+        params,
+      })
+    }
     return inertia.render('challenges/create/index', {
-      params,
+      challenge,
+      isEditPage,
     })
   }
 

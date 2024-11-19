@@ -1,28 +1,52 @@
 import { FieldsGenerator } from '~/components/form-builder'
 import { DashboardLayout } from '~/components/layouts/dashboard'
 import { Form } from '~/components/ui/form'
-import { challengeFormFields, defaultValues, resolver, TChallengeForm } from './forms'
-import { useForm } from 'react-hook-form'
+import { challengeFormFields, ChallengeFormValues, defaultValues, resolver } from './forms'
+import { SubmitHandler, useForm } from 'react-hook-form'
 import { Button } from '~/components/ui/button'
-import { Link, router } from '@inertiajs/react'
+import { router } from '@inertiajs/react'
 import { useCreateChallenge } from '~/hooks/challenges/useCreateChallenge'
+import { Challenge } from '~/types/challenge'
+import { userUpdateChallenge } from '~/hooks/challenges/useUpdateChallenge'
 
 type PageProps = {
-  params: {
-    challengeId: string
-  }
+  challenge: Challenge
+  isEditPage: boolean
 }
+
 export default function SingleChallengePage(props: PageProps) {
+  const { challenge, isEditPage } = props
+
   const form = useForm({
-    defaultValues,
+    defaultValues: isEditPage
+      ? {
+          ...challenge,
+          tags: [],
+        }
+      : defaultValues,
     resolver,
   })
-  const { createChallenge } = useCreateChallenge()
 
-  const onSubmitHandler = async (data: TChallengeForm) => {
+  const { createChallenge, createChallengeIsLoading } = useCreateChallenge()
+  const { updateChallenge, updateChallengeIsLoading } = userUpdateChallenge(challenge.id || '')
+
+  const buttonLabel = isEditPage ? 'Update Challenge' : 'Create Challenge'
+
+  const onSubmitHandler: SubmitHandler<ChallengeFormValues> = async (data) => {
+    if (isEditPage) {
+      const response = await updateChallenge(data, {
+        onError: (error) => {
+          console.log(error)
+        },
+        onSuccess: (data) => {
+          console.log({ data })
+        },
+      })
+      console.log({ response })
+    }
+
     const response = await createChallenge(data, {
       onError: (error) => {
-        router.replace('/login')
         console.log(error)
       },
       onSuccess: (data) => {
@@ -38,7 +62,7 @@ export default function SingleChallengePage(props: PageProps) {
       <Form {...form}>
         <form onSubmit={form.handleSubmit(onSubmitHandler)}>
           <FieldsGenerator fields={challengeFormFields} form={form} />
-          <Button>Create Challenge</Button>
+          <Button>{buttonLabel}</Button>
         </form>
       </Form>
     </div>
