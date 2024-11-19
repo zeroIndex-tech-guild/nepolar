@@ -27,7 +27,9 @@ export default class Challenge extends BaseModel {
   @hasMany(() => Log)
   declare logs: HasMany<typeof Log>
 
-  @manyToMany(() => Tag)
+  @manyToMany(() => Tag, {
+    pivotTimestamps: true,
+  })
   declare tags: ManyToMany<typeof Tag>
 
   @column.dateTime({ autoCreate: true })

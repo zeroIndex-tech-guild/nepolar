@@ -10,7 +10,9 @@ export default class Tag extends BaseModel {
   @column()
   declare name: string
 
-  @manyToMany(() => Challenge)
+  @manyToMany(() => Challenge, {
+    pivotTimestamps: true,
+  })
   declare challenges: ManyToMany<typeof Challenge>
 
   @column.dateTime({ autoCreate: true })
