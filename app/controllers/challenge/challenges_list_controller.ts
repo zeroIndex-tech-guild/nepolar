@@ -1,20 +1,26 @@
-import Challenge from '#models/challenge'
+import { ChallengeService } from '#services/challenge/index'
 import { createChallengeValidator } from '#validators/challenge/create'
 import { getAllChallengeValidator } from '#validators/challenge/getAll'
+import { inject } from '@adonisjs/core'
 import type { HttpContext } from '@adonisjs/core/http'
 import { StatusCodes } from 'http-status-codes'
+import { NepoarResponse } from '../../lib/nepolar-response.js'
 
+@inject()
 export default class ChallengesController {
-  async show({ inertia, auth }: HttpContext) {
-    const user = auth.user
+  constructor(protected challengeService: ChallengeService) {}
 
-    if (!user) {
-      return inertia.render('auth/login')
-    }
+  async show({ inertia, auth, request }: HttpContext) {
+    const user = auth.user!
 
-    const challenges = await Challenge.query()
-      .where('user_id', user.id)
-      .orderBy('created_at', 'desc')
+    const { page = 1, limit = 25, orderBy = 'desc' } = request.qs()
+
+    const { challenges, error } = await this.challengeService.findAll({
+      userId: user?.id,
+      page,
+      limit,
+      orderBy,
+    })
 
     return inertia.render('challenges/index', {
       challenges,
@@ -22,27 +28,23 @@ export default class ChallengesController {
   }
 
   async create({ request, response, auth }: HttpContext) {
-    try {
-      const payload = await request.validateUsing(createChallengeValidator)
+    const payload = await request.validateUsing(createChallengeValidator)
 
-      const { days, name, tags, description } = payload
+    const { days, name, tags, description } = payload
 
-      const user = auth.user
+    const user = auth.user!
 
-      const challenge = await Challenge.create({
-        days,
-        name,
-        description,
-        userId: user?.id,
-      })
-
-      return response.safeStatus(StatusCodes.CREATED).json({
+    const { challenge, error } = await this.challengeService.create(
+      {
         days,
         name,
         tags,
-        challenge,
-      })
-    } catch (error) {
+        description,
+      },
+      user?.id
+    )
+
+    if (error !== null) {
       let error_response = {
         success: false,
         message: "Couldn't create a new challenge at the moment.",
@@ -66,45 +68,34 @@ export default class ChallengesController {
 
       return response.status(500).json(error_response)
     }
+
+    return response.safeStatus(StatusCodes.CREATED).json({
+      days,
+      name,
+      tags,
+      challenge,
+    })
   }
 
-  async findAll({ auth, request }: HttpContext) {
-    const user = auth.user
+  async findAll({ auth, request, response }: HttpContext) {
+    const user = auth.user!
     const { page, limit, orderBy } = await request.validateUsing(getAllChallengeValidator)
 
-    if (!user) {
-      return {
-        success: false,
-        message: "Couldn't fetch challenges at the moment.",
-        error: {
-          message: "Couldn't fetch challenges at the moment.",
-        },
-        data: null,
-      }
+    const { challenges, error } = await this.challengeService.findAll({
+      userId: user?.id,
+      page,
+      limit,
+      orderBy,
+    })
+
+    if (error !== null) {
+      response
+        .status(error.status)
+        .json(NepoarResponse.failure(error, 'Challenges could not be fetched at the moment.'))
     }
 
-    try {
-      //const challenges = await Challenge.findManyBy({ user_id: user?.id })
-      const challenges = await Challenge.query()
-        .where('user_id', user?.id)
-        .orderBy('created_at', 'desc')
-        .paginate(page, limit)
-
-      return {
-        success: true,
-        message: 'Challenges fetched successfully.',
-        error: null,
-        data: challenges,
-      }
-    } catch (error) {
-      return {
-        success: false,
-        message: "Couldn't fetch challenges at the moment.",
-        error: {
-          error,
-        },
-        data: null,
-      }
-    }
+    return response
+      .safeStatus(StatusCodes.OK)
+      .json(NepoarResponse.success(challenges, 'Challenges fetched successfully.'))
   }
 }
