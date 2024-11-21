@@ -20,11 +20,12 @@ type PageProps = {
 export default function SingleChallengePage(props: PageProps) {
   const { challenge, isEditPage, challengeId } = props
 
+  console.log({ props })
   const form = useForm({
     defaultValues: isEditPage
       ? {
           ...challenge,
-          tags: [],
+          tags: challenge.tags.map((tag) => tag.name),
         }
       : defaultValues,
     resolver,

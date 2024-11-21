@@ -1,7 +1,7 @@
 /** @type {import('tailwindcss').Config} */
 export default {
   darkMode: ['class'],
-  content: ['./inertia/pages/**/*.{js,ts,jsx,tsx}'],
+  content: ['./inertia/**/*.{js,ts,jsx,tsx}', './resources/**/*.{edge,js,ts,jsx,tsx}'],
   theme: {
     extend: {
       borderRadius: {

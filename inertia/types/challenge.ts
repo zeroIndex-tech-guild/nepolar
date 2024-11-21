@@ -1,9 +1,11 @@
+import { Tag } from './tag'
+
 export type Challenge = {
   id: string
   name: string
   description: string
   days: number
-  tags: string[]
+  tags: Tag[]
   userId: string
   createdAt: string
   updatedAt: string

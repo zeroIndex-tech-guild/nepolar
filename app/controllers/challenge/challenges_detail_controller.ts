@@ -73,7 +73,6 @@ export default class ChallengesController {
     try {
       const challenge = await Challenge.findOrFail(challengeId)
       challenge.merge(payload)
-      console.log({ challenge }, '********')
       await challenge.save()
 
       const message = `Challenge updated: ${challenge.name}`

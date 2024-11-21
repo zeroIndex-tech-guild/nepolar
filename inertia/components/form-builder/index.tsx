@@ -4,12 +4,13 @@ import { Input } from '~/components/ui/input'
 import { MDXEditor } from '../ui/mdx-editor'
 import { DevTool } from '@hookform/devtools'
 import env from '#start/env'
+import { TagsInput } from '../ui/tags-input'
 
 type TInputElField = {
   name: string
   label: string
   placeholder: string
-  type: 'text' | 'email' | 'password' | 'number' | 'textarea' | 'mdx'
+  type: 'text' | 'email' | 'password' | 'number' | 'textarea' | 'mdx' | 'tags-input'
   required?: boolean
 }
 
@@ -57,7 +58,7 @@ export const FieldGenerator = (props: FieldGeneratorProps) => {
               <FormLabel>{label}</FormLabel>
 
               <FormControl>
-                <Input {...field} placeholder={placeholder} />
+                <Input {...field} placeholder={placeholder} type={type} />
               </FormControl>
               <FormMessage className="text-red-500" />
             </FormItem>
@@ -101,6 +102,29 @@ export const FieldGenerator = (props: FieldGeneratorProps) => {
           )}
         />
       )
+
+    case 'tags-input': {
+      const { label } = props.field as TInputElField
+      return (
+        <FormField
+          control={control}
+          name={name}
+          render={({ field }) => (
+            <FormItem>
+              <FormLabel>{label}</FormLabel>
+              <FormControl>
+                <TagsInput
+                  value={field.value}
+                  onValueChange={field.onChange}
+                  placeholder={field.placeholder}
+                />
+              </FormControl>
+              <FormMessage className="text-red-500" />
+            </FormItem>
+          )}
+        />
+      )
+    }
     default:
       const message = `Field type ${type} not supported`
       throw new Error(message)
@@ -109,12 +133,10 @@ export const FieldGenerator = (props: FieldGeneratorProps) => {
 
 export const FieldsGenerator = (props: { fields: Field[]; form: UseFormReturn<any> }) => {
   const { fields, form } = props
-  //const isDev = env.get('NODE_ENV') === 'development'
-  const isDev = true
 
   return (
     <>
-      {isDev && <DevTool control={form.control} />}
+      <DevTool control={form.control} />
       {fields.map((field) => (
         <FieldGenerator key={field.name} field={field} form={form} />
       ))}

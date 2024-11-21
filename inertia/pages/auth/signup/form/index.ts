@@ -4,6 +4,12 @@ import { zodResolver } from '@hookform/resolvers/zod'
 
 export const signupFields: Field[] = [
   {
+    name: 'userName',
+    type: 'text',
+    label: 'Username',
+    placeholder: 'nepolar',
+  },
+  {
     name: 'fullName',
     type: 'text',
     label: 'Full Name',
@@ -31,6 +37,9 @@ export const signupFields: Field[] = [
 
 const ZSignupSchema = z
   .object({
+    userName: z.string().min(1, {
+      message: 'Please enter a username.',
+    }),
     fullName: z.string().min(1, {
       message: 'Please enter your full name.',
     }),
@@ -50,6 +59,7 @@ const ZSignupSchema = z
   })
 
 export const defaultValues = {
+  userName: '',
   fullName: '',
   email: '',
   password: '',

@@ -17,11 +17,10 @@ export const challengeFormFields: Field[] = [
     placeholder: '30',
   },
   {
-    type: 'custom',
+    label: 'Tags',
+    type: 'tags-input',
     name: 'tags',
-    render: (field) => {
-      return <div>Tags</div>
-    },
+    placeholder: "Challenge's tags",
   },
   {
     type: 'mdx',

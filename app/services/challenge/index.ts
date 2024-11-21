@@ -4,10 +4,17 @@ import { CreateChallenge } from '#types/challenge'
 export class ChallengeService {
   async create(challenge: CreateChallenge, userId: number) {
     try {
+      const { tags, ...rest } = challenge
       const newChallenge = await Challenge.create({
-        ...challenge,
+        ...rest,
         userId,
       })
+
+      const mappedTags = tags.map((tag) => ({ name: tag }))
+
+      newChallenge.related('tags').createMany(mappedTags)
+
+      //newChallenge.related('tags').load()
       return {
         challenge: newChallenge,
         error: null,
@@ -51,7 +58,11 @@ export class ChallengeService {
 
   async findOne(challengeId: string) {
     try {
-      const challenge = await Challenge.query().preload('logs').where('id', challengeId).first()
+      const challenge = await Challenge.query()
+        .preload('logs')
+        .preload('tags')
+        .where('id', challengeId)
+        .first()
       return {
         challenge,
         error: null,
