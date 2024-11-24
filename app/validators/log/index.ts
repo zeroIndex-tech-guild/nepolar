@@ -2,6 +2,7 @@ import vine from '@vinejs/vine'
 
 const logSchema = vine.object({
   content: vine.string().minLength(1),
+  title: vine.string().minLength(1),
 
   params: vine.object({
     challengeId: vine.number(),

@@ -56,7 +56,7 @@ export class ChallengeService {
     }
   }
 
-  async findOne(challengeId: string) {
+  async findOne(challengeId: string | number) {
     try {
       const challenge = await Challenge.query()
         .preload('logs')

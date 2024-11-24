@@ -1,15 +1,17 @@
 import { BaseSchema } from '@adonisjs/lucid/schema'
 
 export default class extends BaseSchema {
-  protected tableName = 'users'
+  protected tableName = 'challenges'
 
   async up() {
     this.schema.alterTable(this.tableName, (table) => {
-      table.string('user_name').unique().notNullable()
+      table.dateTime('start_date')
     })
   }
 
   async down() {
-    this.schema.dropTable(this.tableName)
+    this.schema.alterTable(this.tableName, (table) => {
+      table.dropColumn('start_date')
+    })
   }
 }

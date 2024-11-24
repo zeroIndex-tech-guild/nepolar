@@ -11,6 +11,9 @@ export default class Log extends BaseModel {
   declare day: number
 
   @column()
+  declare title: string
+
+  @column()
   declare content: string
 
   @column()

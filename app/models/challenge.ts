@@ -19,6 +19,9 @@ export default class Challenge extends BaseModel {
   declare description: string
 
   @column()
+  declare startDate: string | null
+
+  @column()
   declare userId: number
 
   @belongsTo(() => User)
