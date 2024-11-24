@@ -10,31 +10,26 @@ import {
   TimelineContent,
   TimelineTime,
 } from '~/components/timeline/timeline'
-
-export type TimelineElement = {
-  id: number
-  title: string
-  date: string
-  description: string
-}
+import { Log } from '~/types/log'
 
 interface TimelineLayoutProps {
-  items: TimelineElement[]
+  items: Log[]
 }
-export const TimelineLayout = ({ items }: TimelineLayoutProps) => {
+
+export const LogsTimeline = ({ items = [] }: TimelineLayoutProps) => {
   const timelineItems = items.map((item) => (
-    <TimelineItem>
+    <TimelineItem key={item.id}>
       <TimelineConnector />
       <TimelineHeader>
-        <TimelineTime>{item.date}</TimelineTime>
+        <TimelineTime>Day {item.day}</TimelineTime>
         <TimelineIcon />
 
-        <Link href="">
+        <Link href={`logs/${item.id}`}>
           <TimelineTitle className="hover:underline hover:text-primary">{item.title}</TimelineTitle>
         </Link>
       </TimelineHeader>
       <TimelineContent>
-        <TimelineDescription>{item.description}</TimelineDescription>
+        <TimelineDescription className="truncate">{item.content}</TimelineDescription>
       </TimelineContent>
     </TimelineItem>
   ))

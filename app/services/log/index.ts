@@ -35,6 +35,8 @@ export class LogService {
         await challenge.save()
       }
 
+      console.log({ log }, 'log is here...')
+
       const newLog = await Log.create({
         challengeId,
         content: log.content,
