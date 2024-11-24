@@ -25,6 +25,7 @@ import {
 } from '@mdxeditor/editor'
 
 import '@mdxeditor/editor/style.css'
+import { cn } from '~/lib/utils'
 
 type Props = {
   /** The current markdown content of the editor */
@@ -129,7 +130,7 @@ const createPlugins = (imageDropHandler: (image: File) => Promise<string>, readO
 export const MDXEditor: React.FC<Props> = ({
   markdown = '',
   imageDropHandler,
-  contentEditableClassName = 'prose',
+  contentEditableClassName,
   onChange,
   readOnly = true,
 }) => {
@@ -148,7 +149,10 @@ export const MDXEditor: React.FC<Props> = ({
         readOnly={readOnly}
         markdown={markdown}
         plugins={plugins}
-        contentEditableClassName={contentEditableClassName}
+        contentEditableClassName={cn(
+          'prose dark:text-gray-300 border border-primary rounded-md min-h-[256px]',
+          contentEditableClassName
+        )}
         onChange={handleChange}
       />
     )

@@ -35,9 +35,9 @@ export default class LogsListsController {
   }
 
   async create({ request, response }: HttpContext) {
-    const log = await request.validateUsing(createLogValidator)
+    const { params, content } = await request.validateUsing(createLogValidator)
 
-    const { log: newLog, error } = await this.logService.create(log)
+    const { log: newLog, error } = await this.logService.create({ content }, params.challengeId)
 
     if (error !== null) {
       return response

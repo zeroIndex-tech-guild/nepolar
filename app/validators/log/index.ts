@@ -2,7 +2,10 @@ import vine from '@vinejs/vine'
 
 const logSchema = vine.object({
   content: vine.string().minLength(1),
-  challengeId: vine.number(),
+
+  params: vine.object({
+    challengeId: vine.number(),
+  }),
 })
 
 export const createLogValidator = vine.compile(logSchema)
@@ -31,5 +34,13 @@ export const findAllLogsValidator = vine.compile(
 export const deleteLogValidator = vine.compile(
   vine.object({
     logId: vine.number(),
+  })
+)
+
+export const renderCreateLogPageValidator = vine.compile(
+  vine.object({
+    params: vine.object({
+      challengeId: vine.number(),
+    }),
   })
 )

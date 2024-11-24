@@ -2,10 +2,27 @@ import { LogService } from '#services/log/index'
 import type { HttpContext } from '@adonisjs/core/http'
 import { NepoarResponse } from '../../lib/nepolar-response.js'
 import { StatusCodes } from 'http-status-codes'
-import { deleteLogValidator, findLogValidator, updateLogValidator } from '#validators/log/index'
+import {
+  deleteLogValidator,
+  findLogValidator,
+  renderCreateLogPageValidator,
+  updateLogValidator,
+} from '#validators/log/index'
+import { inject } from '@adonisjs/core'
 
+@inject()
 export default class LogsDetailsController {
   constructor(protected logService: LogService) {}
+
+  async renderCreateNewLogPage({ inertia, request }: HttpContext) {
+    const {
+      params: { challengeId },
+    } = await request.validateUsing(renderCreateLogPageValidator)
+
+    return inertia.render('logs/create/index', {
+      challengeId,
+    })
+  }
 
   async renderLogPage({ inertia, request }: HttpContext) {
     const { logId } = await request.validateUsing(findLogValidator)

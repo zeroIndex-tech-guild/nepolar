@@ -70,7 +70,9 @@ router.group(() => {
       // shows the challenge detail
       router.get('/:challengeId', [ChallengeDetailController, 'detail']).as('detail_page')
 
-      // edit the challenge
+      // create /  edit the challenge
+      // when creating /:challengeId => /create
+      // whenEditing /:challengeId/edit
       router.get('/:challengeId/edit', [ChallengeDetailController, 'edit']).as('edit_page')
 
       /*
@@ -80,9 +82,9 @@ router.group(() => {
         .group(() => {
           router.get('', [LogsListController, 'renderLogsPage']).as('list_page')
 
-          router.get('/:logId', [LogsDetailsController, 'renderLogPage']).as('detail_page')
+          router.get('/:logId', [LogsDetailsController, 'renderCreateNewLogPage']).as('detail_page')
 
-          router.get('/:logId/edit', [LogsDetailsController, 'renderLogPage']).as('edit_page')
+          router.get('/:logId/edit', [LogsDetailsController, 'renderLogPage']).as('create_edit')
         })
         .prefix('/:challengeId/logs')
         .as('logs-page')

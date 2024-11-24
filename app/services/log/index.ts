@@ -2,10 +2,10 @@ import Log from '#models/log'
 import { CreateLog, FindAllLogs } from '#types/log'
 
 export class LogService {
-  async create(log: CreateLog) {
+  async create(log: Omit<CreateLog, 'params'>, challengeId: number) {
     try {
       const newLog = await Log.create({
-        challengeId: log.challengeId,
+        challengeId,
         content: log.content,
       })
       return {
