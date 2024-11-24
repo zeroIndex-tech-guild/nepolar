@@ -6,17 +6,13 @@ const logSchema = vine.object({
 
   params: vine.object({
     challengeId: vine.number(),
+    logId: vine.string(),
   }),
 })
 
 export const createLogValidator = vine.compile(logSchema)
 
-export const updateLogValidator = vine.compile(
-  vine.object({
-    ...logSchema.getProperties(),
-    logId: vine.number(),
-  })
-)
+export const updateLogValidator = createLogValidator
 
 export const findLogValidator = vine.compile(vine.object({ logId: vine.number() }))
 
@@ -34,7 +30,9 @@ export const findAllLogsValidator = vine.compile(
 
 export const deleteLogValidator = vine.compile(
   vine.object({
-    logId: vine.number(),
+    params: vine.object({
+      logId: vine.number(),
+    }),
   })
 )
 
@@ -42,6 +40,7 @@ export const renderCreateLogPageValidator = vine.compile(
   vine.object({
     params: vine.object({
       challengeId: vine.number(),
+      logId: vine.string(),
     }),
   })
 )

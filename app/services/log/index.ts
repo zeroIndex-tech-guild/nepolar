@@ -35,8 +35,6 @@ export class LogService {
         await challenge.save()
       }
 
-      console.log({ log }, 'log is here...')
-
       const newLog = await Log.create({
         challengeId,
         content: log.content,
@@ -75,7 +73,7 @@ export class LogService {
     }
   }
 
-  async find(id: number) {
+  async find(id: string) {
     try {
       const log = await Log.find(id)
       return {
@@ -106,11 +104,11 @@ export class LogService {
     }
   }
 
-  async update(id: number, content: string) {
+  async update(logId: string, log: Omit<CreateLog, 'params'>) {
     try {
-      const log = await Log.find(id)
-      log?.merge({ content })
-      await log?.save()
+      const currentLog = await Log.find(logId)
+      currentLog?.merge(log)
+      await currentLog?.save()
       return {
         log,
         error: null,

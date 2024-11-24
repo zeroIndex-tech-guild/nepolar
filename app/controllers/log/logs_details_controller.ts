@@ -16,11 +16,36 @@ export default class LogsDetailsController {
 
   async renderCreateNewLogPage({ inertia, request }: HttpContext) {
     const {
-      params: { challengeId },
+      params: { challengeId, logId },
     } = await request.validateUsing(renderCreateLogPageValidator)
 
+    const isEditPage = String(challengeId) !== 'create'
+
+    if (!isEditPage) {
+      return inertia.render('logs/create/index', {
+        log: null,
+        logId,
+        challengeId,
+        error: null,
+      })
+    }
+
+    const { error, log } = await this.logService.find(logId)
+
+    if (error !== null) {
+      return inertia.render('logs/create/index', {
+        logId,
+        log: null,
+        challengeId,
+        error,
+      })
+    }
+
     return inertia.render('logs/create/index', {
+      logId,
+      log,
       challengeId,
+      error,
     })
   }
 
@@ -54,9 +79,9 @@ export default class LogsDetailsController {
   }
 
   async update({ request, response }: HttpContext) {
-    const log = await request.validateUsing(updateLogValidator)
+    const { params, ...rest } = await request.validateUsing(updateLogValidator)
 
-    const { error, log: updatedLog } = await this.logService.update(log.logId, log.content)
+    const { error, log: updatedLog } = await this.logService.update(params.logId, rest)
 
     if (error !== null) {
       return response
