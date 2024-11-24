@@ -20,9 +20,9 @@ export class LogService {
     }
   }
 
-  async findMany(props: FindAllLogs) {
+  async findMany(challengeId: number, props: Omit<FindAllLogs, 'params'>) {
     try {
-      const { challengeId, page = 1, limit = 25, orderBy = 'desc' } = props
+      const { page = 1, limit = 25, orderBy = 'desc' } = props
       const logs = await Log.query()
         .where('challenge_id', challengeId)
         .orderBy('created_at', orderBy)
@@ -35,6 +35,54 @@ export class LogService {
     } catch (error) {
       return {
         logs: null,
+        error,
+      }
+    }
+  }
+
+  async find(id: number) {
+    try {
+      const log = await Log.find(id)
+      return {
+        log,
+        error: null,
+      }
+    } catch (error) {
+      return {
+        log: null,
+        error,
+      }
+    }
+  }
+
+  async delete(logId: number) {
+    try {
+      const log = await Log.find(logId)
+      await log?.delete()
+      return {
+        log,
+        error: null,
+      }
+    } catch (error) {
+      return {
+        log: null,
+        error,
+      }
+    }
+  }
+
+  async update(id: number, content: string) {
+    try {
+      const log = await Log.find(id)
+      log?.merge({ content })
+      await log?.save()
+      return {
+        log,
+        error: null,
+      }
+    } catch (error) {
+      return {
+        log: null,
         error,
       }
     }

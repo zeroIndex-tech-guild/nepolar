@@ -10,13 +10,17 @@ export default class LogsListsController {
   constructor(protected logService: LogService) {}
 
   async renderLogsPage({ inertia, request }: HttpContext) {
-    const { challengeId } = await request.validateUsing(findAllLogsValidator)
+    const {
+      page = 1,
+      limit = 25,
+      orderBy = 'desc',
+      params: { challengeId },
+    } = await request.validateUsing(findAllLogsValidator)
 
-    const { error, logs } = await this.logService.findMany({
-      challengeId,
-      page: 1,
-      limit: 25,
-      orderBy: 'desc',
+    const { error, logs } = await this.logService.findMany(challengeId, {
+      page,
+      limit,
+      orderBy,
     })
 
     if (error !== null) {
@@ -49,11 +53,10 @@ export default class LogsListsController {
       page = 1,
       limit = 25,
       orderBy = 'desc',
-      challengeId,
+      params: { challengeId },
     } = await request.validateUsing(findAllLogsValidator)
 
-    const { error, logs } = await this.logService.findMany({
-      challengeId,
+    const { error, logs } = await this.logService.findMany(challengeId, {
       page,
       limit,
       orderBy,

@@ -18,10 +18,13 @@ export const findLogValidator = vine.compile(vine.object({ logId: vine.number() 
 
 export const findAllLogsValidator = vine.compile(
   vine.object({
-    challengeId: vine.number(),
-    page: vine.number(),
-    limit: vine.number(),
-    orderBy: vine.enum(['desc', 'asc']),
+    page: vine.number().optional(),
+    limit: vine.number().optional(),
+    orderBy: vine.enum(['desc', 'asc']).optional(),
+
+    params: vine.object({
+      challengeId: vine.number(),
+    }),
   })
 )
 
