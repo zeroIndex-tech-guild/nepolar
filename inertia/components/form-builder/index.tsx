@@ -92,6 +92,7 @@ export const FieldGenerator = (props: FieldGeneratorProps) => {
               <FormLabel>{field.label}</FormLabel>
               <FormControl>
                 <MDXEditor
+                  readOnly={false}
                   markdown={field.value}
                   onChange={field.onChange}
                   imageDropHandler={async () => ''}

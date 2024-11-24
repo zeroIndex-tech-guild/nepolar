@@ -34,7 +34,7 @@ type Props = {
    * Callback for handling image upload.
    * It takes an image file as input and returns the URL of the uploaded image.
    */
-  imageDropHandler: (image: File) => Promise<string>
+  imageDropHandler?: (image: File) => Promise<string>
 
   /**
    * CSS class for the content editable area.
@@ -45,7 +45,13 @@ type Props = {
   /**
    * Callback fired when the markdown content changes.
    */
-  onChange: (markdown: string) => void
+  onChange?: (markdown: string) => void
+
+  /**
+   * Whether the editor is read-only.
+   * Defaults to false.
+   */
+  readOnly?: boolean
 }
 
 // Default Sandpack snippet content
@@ -77,7 +83,7 @@ const simpleSandpackConfig: SandpackConfig = {
   ],
 }
 
-const createPlugins = (imageDropHandler: (image: File) => Promise<string>) => [
+const createPlugins = (imageDropHandler: (image: File) => Promise<string>, readOnly: boolean) => [
   headingsPlugin({}),
   quotePlugin({}),
   listsPlugin({}),
@@ -87,35 +93,37 @@ const createPlugins = (imageDropHandler: (image: File) => Promise<string>) => [
   imagePlugin({ imageUploadHandler: imageDropHandler }),
   tablePlugin({}),
   markdownShortcutPlugin({}),
-  toolbarPlugin({
-    toolbarContents: () => (
-      <>
-        <UndoRedo />
-        <BoldItalicUnderlineToggles />
-        <InsertFrontmatter />
-        <ConditionalContents
-          options={[
-            {
-              when: (editor) => editor?.editorType === 'codeblock',
-              contents: () => <ChangeCodeMirrorLanguage />,
-            },
-            {
-              when: (editor) => editor?.editorType === 'sandpack',
-              contents: () => <ShowSandpackInfo />,
-            },
-            {
-              fallback: () => (
-                <>
-                  <InsertCodeBlock />
-                  <InsertSandpack />
-                </>
-              ),
-            },
-          ]}
-        />
-      </>
-    ),
-  }),
+
+  !readOnly &&
+    toolbarPlugin({
+      toolbarContents: () => (
+        <>
+          <UndoRedo />
+          <BoldItalicUnderlineToggles />
+          <InsertFrontmatter />
+          <ConditionalContents
+            options={[
+              {
+                when: (editor) => editor?.editorType === 'codeblock',
+                contents: () => <ChangeCodeMirrorLanguage />,
+              },
+              {
+                when: (editor) => editor?.editorType === 'sandpack',
+                contents: () => <ShowSandpackInfo />,
+              },
+              {
+                fallback: () => (
+                  <>
+                    <InsertCodeBlock />
+                    <InsertSandpack />
+                  </>
+                ),
+              },
+            ]}
+          />
+        </>
+      ),
+    }),
 ]
 
 export const MDXEditor: React.FC<Props> = ({
@@ -123,8 +131,9 @@ export const MDXEditor: React.FC<Props> = ({
   imageDropHandler,
   contentEditableClassName = 'prose',
   onChange,
+  readOnly = true,
 }) => {
-  const plugins = createPlugins(imageDropHandler)
+  const plugins = createPlugins(imageDropHandler, readOnly)
 
   const handleChange = useCallback(
     (newMarkdown: string) => {
@@ -136,6 +145,7 @@ export const MDXEditor: React.FC<Props> = ({
   try {
     return (
       <OGMDXEditor
+        readOnly={readOnly}
         markdown={markdown}
         plugins={plugins}
         contentEditableClassName={contentEditableClassName}
