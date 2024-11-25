@@ -3,6 +3,7 @@ import { createInertiaApp } from '@inertiajs/react'
 import { QueryProvider } from '~/components/providers/query-provider'
 import { Toaster } from 'sonner'
 import { ThemeProvider } from '~/components/providers/theme-providres'
+import { AxiosProvider } from '~/components/providers/axios-provider'
 
 export default function render(page: any) {
   return createInertiaApp({
@@ -13,12 +14,14 @@ export default function render(page: any) {
       return pages[`../pages/${name}.tsx`]
     },
     setup: ({ App, props }) => (
-      <QueryProvider>
-        <ThemeProvider defaultTheme="dark" storageKey="nepolarTheme">
-          <Toaster richColors />
-          <App {...props} />
-        </ThemeProvider>
-      </QueryProvider>
+      <AxiosProvider>
+        <QueryProvider>
+          <ThemeProvider defaultTheme="dark" storageKey="nepolarTheme">
+            <Toaster richColors />
+            <App {...props} />
+          </ThemeProvider>
+        </QueryProvider>
+      </AxiosProvider>
     ),
   })
 }

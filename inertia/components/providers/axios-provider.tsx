@@ -1,49 +1,44 @@
 import React, { createContext, useContext } from 'react'
 import axios, { AxiosInstance } from 'axios'
 
-const AxiosContext = createContext<null | AxiosInstance>(null)
+const AxiosContext = createContext<AxiosInstance | null>(null)
 
 export const axiosInstance = axios.create({
-  baseURL: '/api/',
+  baseURL: '/api/', // Set your base API URL here
 })
 
 export const AxiosProvider = ({ children }: { children: React.ReactNode }) => {
-  // Request interceptor
+  // Attach request interceptor
   axiosInstance.interceptors.request.use(
     (config) => {
-      // Add authorization token to headers if available
-      const token = localStorage.getItem('token') // Assuming you store token in local storage
-      if (token) {
-        config.headers.Authorization = `Bearer ${token}`
-      }
       return config
     },
     (error) => {
-      // Handle the request error
+      // Handle request errors (e.g., network issues, invalid configs)
+      console.error('Request error:', error)
       return Promise.reject(error)
     }
   )
 
-  // Response interceptor
+  // Attach response interceptor
   axiosInstance.interceptors.response.use(
     (response) => {
-      return response
+      // Successfully received response
+      return response.data
     },
     (error) => {
-      // Handle the response error globally
+      // Handle errors from server responses
       if (error.response) {
-        console.error('API error:', error.response.data)
-        // Here you can add custom error handling
-        // e.g., redirect to login if unauthorized
+        return Promise.reject(error.response.data)
       }
-      return Promise.reject(error)
+      return Promise.reject(error) // Always reject to propagate the error
     }
   )
 
   return <AxiosContext.Provider value={axiosInstance}>{children}</AxiosContext.Provider>
 }
 
-// Custom hook to use Axios instance
+// Custom hook to access the Axios instance
 export const useAxios = () => {
   const context = useContext(AxiosContext)
   if (!context) {
