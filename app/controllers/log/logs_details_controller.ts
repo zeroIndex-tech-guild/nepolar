@@ -93,7 +93,9 @@ export default class LogsDetailsController {
   }
 
   async delete({ request, response }: HttpContext) {
-    const { logId } = await request.validateUsing(deleteLogValidator)
+    const {
+      params: { logId },
+    } = await request.validateUsing(deleteLogValidator)
     const { error } = await this.logService.delete(logId)
 
     if (error !== null) {
