@@ -33,4 +33,7 @@ const ZLoginSchema = z.object({
 
 export const resolver = zodResolver(ZLoginSchema)
 
+/*
+ * TLoginValues represents the type of the values passed to the login form.
+ */
 export type TLoginValues = z.infer<typeof ZLoginSchema>

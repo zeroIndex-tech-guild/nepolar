@@ -6,6 +6,7 @@ import { FieldsGenerator } from '~/components/form-builder'
 import { Button } from '~/components/ui/button'
 import { useSignup } from './hooks/useSignup'
 import { Link } from '@inertiajs/react'
+import { Typography } from '~/components/ui/typography'
 
 export default function SignupPage() {
   const form = useForm({
@@ -23,11 +24,11 @@ export default function SignupPage() {
   return (
     <div className="grid place-items-center h-screen">
       <Card className="w-96">
-        <CardHeader>Welcome to Neploar :)</CardHeader>
+        <CardHeader className="text-2xl">Welcome to Neploar :)</CardHeader>
 
         <CardContent>
           <Form {...form}>
-            <form onSubmit={form.handleSubmit(onHandleSubmit)}>
+            <form onSubmit={form.handleSubmit(onHandleSubmit)} className="flex flex-col gap-4">
               <FieldsGenerator fields={signupFields} form={form} />
 
               <Button type="submit" className="w-full text-white mt-4">
@@ -36,7 +37,12 @@ export default function SignupPage() {
             </form>
           </Form>
 
-          <Link href="/login">Already have an account? Login</Link>
+          <Typography.P className="text-sm">
+            Already have an account?{' '}
+            <Link href="/login" className="text-blue-500 hover:underline underline-offset-1">
+              Login
+            </Link>
+          </Typography.P>
         </CardContent>
       </Card>
     </div>

@@ -5,34 +5,29 @@ import { resolver, defaultValues, TLoginValues, loginFields } from './form'
 import { FieldsGenerator } from '~/components/form-builder'
 import { Button } from '~/components/ui/button'
 import { useLogin } from './hooks/useLogin'
-import { Link, router, usePage } from '@inertiajs/react'
+import { Link } from '@inertiajs/react'
+import { Typography } from '~/components/ui/typography'
 
 export default function SignupPage() {
   const form = useForm({
     defaultValues,
     resolver,
   })
-  const pp = usePage()
-  console.log({ pp })
 
   const { login } = useLogin()
 
   const onHandleSubmit: SubmitHandler<TLoginValues> = async (data) => {
-    const response = await login(data, {
-      onSuccess: () => {
-        router.replace('/dashboard')
-      },
-    })
+    await login(data)
   }
 
   return (
     <div className="grid place-items-center h-screen">
       <Card className="w-96">
-        <CardHeader>Welcome back to Neploar :)</CardHeader>
+        <CardHeader className="text-2xl">Welcome back to Neploar :)</CardHeader>
 
         <CardContent>
           <Form {...form}>
-            <form onSubmit={form.handleSubmit(onHandleSubmit)}>
+            <form onSubmit={form.handleSubmit(onHandleSubmit)} className="flex flex-col gap-4">
               <FieldsGenerator fields={loginFields} form={form} />
 
               <Button type="submit" className="w-full text-white mt-4">
@@ -40,7 +35,13 @@ export default function SignupPage() {
               </Button>
             </form>
           </Form>
-          <Link href="/signup">New User? Sign Up</Link>
+
+          <Typography.P className="text-sm">
+            New User?{' '}
+            <Link href="/signup" className="text-blue-500 hover:underline underline-offset-1">
+              Sign Up
+            </Link>
+          </Typography.P>
         </CardContent>
       </Card>
     </div>

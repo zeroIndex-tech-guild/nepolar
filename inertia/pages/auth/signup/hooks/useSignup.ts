@@ -1,37 +1,31 @@
-import { useMutation } from '@tanstack/react-query'
-import { AxiosError } from 'axios'
+import { MutationFunction, useMutation } from '@tanstack/react-query'
 import { axiosInstance } from '~/components/providers/axios-provider'
+import { ErrorResponse, SuccessResponse } from '#sharedTypes/server-response'
+import { User } from '~/types/user'
 import { TSignupValues } from '../form'
+import { toast } from 'sonner'
+import { router } from '@inertiajs/react'
+
+const signup: MutationFunction<SuccessResponse<{ user: User }>> = (data) => {
+  return axiosInstance.post('auth/signup', data)
+}
 
 export const useSignup = () => {
-  const signup = useMutation({
-    mutationKey: ['signup'],
-    mutationFn: async (signupData: TSignupValues) => {
-      try {
-        const response = await axiosInstance.post('auth/signup', signupData)
-        return {
-          success: true,
-          message: 'User created successfully',
-          data: response.data,
-          error: null,
-        }
-      } catch (e) {
-        if (e instanceof AxiosError) {
-          return {
-            success: false,
-            error: {
-              message: e.response?.data.message,
-            },
-            message: 'Failed to create user',
-            data: null,
-          }
-        }
-        console.log({ e })
-      }
-    },
-  })
+  const signupMutation = useMutation<SuccessResponse<{ user: User }>, ErrorResponse, TSignupValues>(
+    {
+      mutationKey: ['signup'],
+      mutationFn: signup,
+      onSuccess: (data) => {
+        toast.success(data.message)
+        router.get('/login')
+      },
+      onError: (error) => {
+        console.log({ error })
+      },
+    }
+  )
 
   return {
-    signup: signup.mutateAsync,
+    signup: signupMutation.mutateAsync,
   }
 }

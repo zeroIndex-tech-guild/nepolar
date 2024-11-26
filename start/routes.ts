@@ -114,7 +114,7 @@ router
      */
     router
       .group(() => {
-        router.post('/signup', [RegisterController, 'create']).as('signup')
+        router.post('/signup', [RegisterController, 'register']).as('signup')
         router.post('/login', [LoginController, 'login']).as('login')
       })
       .as('auth')
