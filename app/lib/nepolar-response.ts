@@ -1,6 +1,6 @@
 import { ErrorDetails, ErrorResponse, SuccessResponse } from '#sharedTypes/server-response'
 
-export class NepoarResponse {
+export class NepolarResponse {
   /**
    * Generates a success response.
    *
@@ -51,19 +51,19 @@ export class NepoarResponse {
    *   ]
    * });
    */
-  static failure({
+  static error({
     statusCode,
     message,
-    errors,
+    error,
   }: {
     statusCode: number
     message: string
-    errors: ErrorDetails[]
+    error: ErrorDetails[]
   }): ErrorResponse {
     return {
       statusCode,
       message,
-      error: errors,
+      error,
       data: null,
     }
   }

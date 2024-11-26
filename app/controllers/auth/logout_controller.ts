@@ -1,14 +1,16 @@
 import type { HttpContext } from '@adonisjs/core/http'
+import { NepolarResponse } from '../../lib/nepolar-response.js'
+import { StatusCodes } from 'http-status-codes'
 
 export default class LogoutController {
-  async handle({ auth }: HttpContext) {
+  async logout({ auth }: HttpContext) {
     await auth.use('web').logout()
 
-    return {
-      success: true,
+    const successResponse = NepolarResponse.success({
+      statusCode: StatusCodes.OK,
       message: 'User logged out successfully',
       data: null,
-      error: null,
-    }
+    })
+    return successResponse
   }
 }

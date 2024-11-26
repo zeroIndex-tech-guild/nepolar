@@ -73,4 +73,4 @@ export type SuccessResponse<T> = {
  *   errors: [{ code: "USER_NOT_FOUND", message: "The user with ID 42 does not exist." }]
  * }
  */
-export type ServerResponse<T> = SuccessResponse<T> | ErrorResponse
+export type INepolarResponse<T> = SuccessResponse<T> | ErrorResponse

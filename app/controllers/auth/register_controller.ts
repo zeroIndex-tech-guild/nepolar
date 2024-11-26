@@ -4,11 +4,17 @@ import { registrationValidator } from '#validators/auth/register'
 import type { HttpContext } from '@adonisjs/core/http'
 
 export default class RegisterController {
-  async show({ inertia }: HttpContext) {
+  async renderSignupPage({ inertia, auth, response }: HttpContext) {
+    const { isAuthenticated } = auth
+
+    if (isAuthenticated) {
+      return response.redirect().toRoute('/dashboard')
+    }
+
     return inertia.render('auth/signup/index')
   }
 
-  async create({ request, response, auth }: HttpContext) {
+  async register({ request, response, auth }: HttpContext) {
     try {
       const payload = await request.validateUsing(registrationValidator)
 

@@ -51,8 +51,8 @@ router.group(() => {
    */
   router
     .group(() => {
-      router.get('/signup', [RegisterController, 'show']).as('signup_page')
-      router.get('/login', [LoginController, 'show']).as('login_page')
+      router.get('/signup', [RegisterController, 'renderSignupPage']).as('signup_page')
+      router.get('/login', [LoginController, 'renderLoginPage']).as('login_page')
     })
     .as('auth')
 
