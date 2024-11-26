@@ -14,9 +14,9 @@ export default function ChallengeDetailPage(props: Props) {
   const { challenge, challengeId } = props
   return (
     <div>
-      <h1 className="text-3xl">{challenge.name}</h1>
+      <Typography.H1>{challenge.name}</Typography.H1>
 
-      <div>
+      <div className="flex gap-4 py-4">
         <Button asChild variant="outline">
           <Link href={`${challengeId}/logs/create`}>Add a log</Link>
         </Button>
@@ -26,12 +26,6 @@ export default function ChallengeDetailPage(props: Props) {
         </Button>
       </div>
       <MDXEditor markdown={challenge.description} readOnly={true} />
-
-      <div>
-        <Typography.Small>Description</Typography.Small>
-
-        <p>{challenge.description}</p>
-      </div>
     </div>
   )
 }

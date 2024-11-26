@@ -85,3 +85,7 @@
   }
 }
 
+.mdxeditor-root-content , .mdxeditor-root-contenteditable{
+  width: 500px;
+}
+
