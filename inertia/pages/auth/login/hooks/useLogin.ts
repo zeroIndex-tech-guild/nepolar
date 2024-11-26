@@ -1,17 +1,17 @@
 import { MutationFunction, useMutation } from '@tanstack/react-query'
 import { axiosInstance } from '~/components/providers/axios-provider'
-import { TLoginValues } from '../form'
-import { router } from '@inertiajs/react'
 import { toast } from 'sonner'
-import { ErrorResponse, SuccessResponse } from '#sharedTypes/server-response'
+import { SuccessResponse } from '#sharedTypes/server-response'
 import { User } from '~/types/user'
+import { LoginResponse } from '~/types/auth'
+import { router } from '@inertiajs/react'
 
 const login: MutationFunction<SuccessResponse<{ user: User }>> = (data) => {
   return axiosInstance.post('auth/login', data)
 }
 
 export const useLogin = () => {
-  const loginMutation = useMutation<SuccessResponse<{ user: User }>, ErrorResponse, TLoginValues>({
+  const loginMutation = useMutation<LoginResponse>({
     mutationKey: ['login'],
     mutationFn: login,
     onSuccess: (data) => {

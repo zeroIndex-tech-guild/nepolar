@@ -32,18 +32,21 @@ export const challengeFormFields: Field[] = [
 
 const challengeFormSchema = z.object({
   name: z.string().min(1, { message: 'Challenge Name is required' }),
-  days: z
-    .string()
-    .transform((val) => parseInt(val, 10))
-    .refine((val) => !isNaN(val), { message: 'Days must be a valid number' }),
+  days: z.coerce.number({
+    invalid_type_error: 'Days must be a valid number',
+  }),
+  //days: z
+  //  .string()
+  //  .transform((val) => parseInt(val, 10))
+  //  .refine((val) => !isNaN(val), { message: 'Days must be a valid number' }),
   tags: z.array(z.string(), { required_error: 'Tags are required' }),
   description: z.string().min(1, { message: 'Description is required' }),
 })
 
 export const defaultValues = {
   name: '',
-  days: '0',
-  tags: [],
+  days: 0,
+  tags: [] as string[],
   description: '',
 }
 

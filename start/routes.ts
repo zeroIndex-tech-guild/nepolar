@@ -62,18 +62,20 @@ router.group(() => {
   router
     .group(() => {
       // shows the list of challenges
-      router.get('', [ChallengeListController, 'show']).as('list_page')
+      router.get('', [ChallengeListController, 'renderChallengesPage']).as('list_page')
 
       // creates a new challenge
-      //router.get('/new', [ChallengeDetailController, 'new']).as('create_page')
+      router.get('/create', [ChallengeListController, 'renderCreatePage']).as('create_page')
 
       // shows the challenge detail
-      router.get('/:challengeId', [ChallengeDetailController, 'detail']).as('detail_page')
+      router.get('/:challengeId', [ChallengeDetailController, 'renderDetailPage']).as('detail_page')
 
       // create /  edit the challenge
       // when creating /:challengeId => /create
       // whenEditing /:challengeId/edit
-      router.get('/:challengeId/edit', [ChallengeDetailController, 'edit']).as('edit_page')
+      router
+        .get('/:challengeId/edit', [ChallengeDetailController, 'renderEditPage'])
+        .as('edit_page')
 
       /*
        * LOGS ROUTES

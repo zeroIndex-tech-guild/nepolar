@@ -1,6 +1,6 @@
 import Challenge from '#models/challenge'
 import type { HttpContext } from '@adonisjs/core/http'
-import { NepoarResponse } from '../../lib/nepolar-response.js'
+import { NepolarResponse } from '../../lib/nepolar-response.js'
 import { updateChallengeValidator } from '#validators/challenge/update'
 import { inject } from '@adonisjs/core'
 import { ChallengeService } from '#services/challenge/index'
@@ -10,18 +10,18 @@ import { StatusCodes } from 'http-status-codes'
 export default class ChallengesController {
   constructor(protected challengeService: ChallengeService) {}
 
-  async edit({ inertia, params }: HttpContext) {
+  async renderEditPage({ inertia, params }: HttpContext) {
     const { challengeId } = params as { challengeId: string }
     const isEditPage = challengeId !== 'create'
 
     const { challenge, error } = await this.challengeService.findOne(challengeId)
 
     if (error !== null) {
-      console.log({ error })
       return inertia.render('challenges/create/index', {
         params,
       })
     }
+
     return inertia.render('challenges/create/index', {
       challenge,
       isEditPage,
@@ -29,7 +29,7 @@ export default class ChallengesController {
     })
   }
 
-  async new({ inertia }: HttpContext) {
+  async renderCreatePage({ inertia }: HttpContext) {
     return inertia.render('challenges/create/index', {
       challenge: null,
       isEditPage: false,
@@ -37,7 +37,7 @@ export default class ChallengesController {
     })
   }
 
-  async detail({ inertia, params }: HttpContext) {
+  async renderDetailPage({ inertia, params }: HttpContext) {
     const { challengeId } = params as { challengeId: string }
     const { challenge, error } = await this.challengeService.findOne(challengeId)
 
@@ -53,20 +53,32 @@ export default class ChallengesController {
     })
   }
 
-  async read({ request }: HttpContext) {
+  async read({ request, response }: HttpContext) {
     const challengeId = request.param('challengeId')
 
     try {
       const challenge = await Challenge.findOrFail(challengeId)
       const message = `Challenge found: ${challenge.name}`
-      return NepoarResponse.success(challenge, message)
+      const successResponse = NepolarResponse.success({
+        statusCode: StatusCodes.OK,
+        data: { challenge },
+        message,
+      })
+
+      return response.status(StatusCodes.OK).json(successResponse)
     } catch (error) {
       const message = `Challenge not found: ${challengeId}`
-      return NepoarResponse.failure(error, message)
+      const errorResponse = {
+        statusCode: StatusCodes.NOT_FOUND,
+        message,
+        error: error,
+      }
+
+      return response.status(StatusCodes.NOT_FOUND).json(errorResponse)
     }
   }
 
-  async update({ request }: HttpContext) {
+  async update({ request, response }: HttpContext) {
     const challengeId = request.param('challengeId')
     const payload = await request.validateUsing(updateChallengeValidator)
 
@@ -76,10 +88,20 @@ export default class ChallengesController {
       await challenge.save()
 
       const message = `Challenge updated: ${challenge.name}`
-      return NepoarResponse.success(challenge, message)
+      const successResponse = NepolarResponse.success({
+        statusCode: StatusCodes.OK,
+        data: { challenge },
+        message,
+      })
+      return response.status(StatusCodes.OK).json(successResponse)
     } catch (error) {
-      console.log({ error })
-      return NepoarResponse.failure(error, "Challenge couldn't be updated.")
+      const errorResponse = NepolarResponse.error({
+        statusCode: StatusCodes.UNPROCESSABLE_ENTITY,
+        message: "Couldn't update challenge at the moment.",
+        error: error,
+      })
+
+      return response.status(StatusCodes.UNPROCESSABLE_ENTITY).json(errorResponse)
     }
   }
 
@@ -90,11 +112,20 @@ export default class ChallengesController {
       const challenge = await Challenge.findOrFail(challengeId)
       await challenge.delete()
       const message = `Challenge deleted: ${challenge.name}`
-      return NepoarResponse.success(challenge, message)
+      const successResponse = NepolarResponse.success({
+        statusCode: StatusCodes.OK,
+        data: { challenge },
+        message,
+      })
+
+      return response.status(StatusCodes.OK).json(successResponse)
     } catch (error) {
-      return response
-        .status(StatusCodes.NOT_MODIFIED)
-        .json(NepoarResponse.failure(error, "Challenge couldn't be deleted."))
+      const errorResponse = NepolarResponse.error({
+        statusCode: StatusCodes.NOT_MODIFIED,
+        message: "Couldn't delete challenge at the moment.",
+        error: error,
+      })
+      return response.status(StatusCodes.NOT_MODIFIED).json(errorResponse)
     }
   }
 }

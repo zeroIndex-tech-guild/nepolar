@@ -26,6 +26,7 @@ export default function ChallengePage(props: Props) {
           <Link href="/challenges/create">Create Challenge</Link>
         </Button>
       </div>
+
       <ChallengesTable data={data} />
     </div>
   )

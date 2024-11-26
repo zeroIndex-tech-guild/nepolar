@@ -3,7 +3,6 @@ import { FormControl, FormField, FormItem, FormLabel, FormMessage } from '~/comp
 import { Input } from '~/components/ui/input'
 import { MDXEditor } from '../ui/mdx-editor'
 import { DevTool } from '@hookform/devtools'
-import env from '#start/env'
 import { TagsInput } from '../ui/tags-input'
 
 type TInputElField = {
@@ -87,14 +86,14 @@ export const FieldGenerator = (props: FieldGeneratorProps) => {
         <FormField
           control={control}
           name={name}
-          render={({ field }) => (
+          render={({ field: { value, onChange } }) => (
             <FormItem>
               <FormLabel>{field.label}</FormLabel>
               <FormControl>
                 <MDXEditor
                   readOnly={false}
-                  markdown={field.value}
-                  onChange={field.onChange}
+                  markdown={value}
+                  onChange={onChange}
                   imageDropHandler={async () => ''}
                 />
               </FormControl>
@@ -110,15 +109,11 @@ export const FieldGenerator = (props: FieldGeneratorProps) => {
         <FormField
           control={control}
           name={name}
-          render={({ field }) => (
+          render={({ field: { value, onChange } }) => (
             <FormItem>
               <FormLabel>{label}</FormLabel>
               <FormControl>
-                <TagsInput
-                  value={field.value}
-                  onValueChange={field.onChange}
-                  placeholder={field.placeholder}
-                />
+                <TagsInput value={value} onValueChange={onChange} placeholder={field.placeholder} />
               </FormControl>
               <FormMessage className="text-red-500" />
             </FormItem>

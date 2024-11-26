@@ -3,7 +3,7 @@ import { DashboardLayout } from '~/components/layouts/dashboard'
 import { Form } from '~/components/ui/form'
 import { challengeFormFields, ChallengeFormValues, defaultValues, resolver } from './forms'
 import { SubmitHandler, useForm } from 'react-hook-form'
-import { Button, LoadingButton } from '~/components/ui/button'
+import { LoadingButton } from '~/components/ui/button'
 import { router } from '@inertiajs/react'
 import { useCreateChallenge } from '~/hooks/challenges/useCreateChallenge'
 import { Challenge } from '~/types/challenge'
@@ -20,7 +20,6 @@ type PageProps = {
 export default function SingleChallengePage(props: PageProps) {
   const { challenge, isEditPage, challengeId } = props
 
-  console.log({ props })
   const form = useForm({
     defaultValues: isEditPage
       ? {
@@ -55,9 +54,8 @@ export default function SingleChallengePage(props: PageProps) {
         toast.error('Something went wrong. Please try again.')
       },
       onSuccess: (data) => {
-        console.log({ data })
         toast.success('Challenge created successfully.')
-        router.visit(`/challenges/${data.data.data.id}`)
+        router.visit(`/challenges/${data.data.challenge.id}`)
       },
     })
   }
@@ -67,7 +65,7 @@ export default function SingleChallengePage(props: PageProps) {
   return (
     <div>
       <Form {...form}>
-        <form onSubmit={form.handleSubmit(onSubmitHandler)}>
+        <form onSubmit={form.handleSubmit(onSubmitHandler)} className="flex flex-col gap-4">
           <FieldsGenerator fields={challengeFormFields} form={form} />
           <div className="flex gap-4 items-center">
             <LoadingButton isLoading={isLoading}>{buttonLabel}</LoadingButton>

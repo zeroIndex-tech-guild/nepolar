@@ -4,18 +4,18 @@ import { getAllChallengeValidator } from '#validators/challenge/getAll'
 import { inject } from '@adonisjs/core'
 import type { HttpContext } from '@adonisjs/core/http'
 import { StatusCodes } from 'http-status-codes'
-import { NepoarResponse } from '../../lib/nepolar-response.js'
+import { NepolarResponse } from '#lib/nepolar-response'
 
 @inject()
 export default class ChallengesController {
   constructor(protected challengeService: ChallengeService) {}
 
-  async show({ inertia, auth, request }: HttpContext) {
+  async renderChallengesPage({ inertia, auth, request }: HttpContext) {
     const user = auth.user!
 
     const { page = 1, limit = 25, orderBy = 'desc' } = request.qs()
 
-    const { challenges = [], error } = await this.challengeService.findAll({
+    const { challenges = [] } = await this.challengeService.findAll({
       userId: user?.id,
       page,
       limit,
@@ -24,6 +24,14 @@ export default class ChallengesController {
 
     return inertia.render('challenges/index', {
       challenges,
+    })
+  }
+
+  async renderCreatePage({ inertia }: HttpContext) {
+    return inertia.render('challenges/create/index', {
+      challenge: null,
+      isEditPage: false,
+      challengeId: 'new',
     })
   }
 
@@ -45,33 +53,37 @@ export default class ChallengesController {
     )
 
     if (error !== null) {
-      let error_response = {
-        success: false,
+      let error_response = NepolarResponse.error({
+        statusCode: StatusCodes.UNPROCESSABLE_ENTITY,
         message: "Couldn't create a new challenge at the moment.",
-        error: {
-          error,
-          details: error.messages,
-        },
-        data: null,
-      }
+        error: [
+          {
+            details: error.messages,
+            message: 'Please provide valid and required data.',
+            code: 'E_VALIDATION_ERROR',
+          },
+        ],
+      })
 
       if (error.code === 'E_VALIDATION_ERROR') {
-        response.status(error.status).json({
-          success: false,
-          message: 'Please provide valid and required data.',
-          error: {
-            details: error.messages,
-          },
-          data: null,
+        error_response = NepolarResponse.error({
+          statusCode: StatusCodes.UNPROCESSABLE_ENTITY,
+          message: "Couldn't create a new challenge at the moment.",
+          error: error.messages,
         })
       }
 
       return response.status(500).json(error_response)
     }
 
-    return response
-      .safeStatus(StatusCodes.CREATED)
-      .json(NepoarResponse.success(challenge, 'Challenge created successfully.'))
+    const successResponse = NepolarResponse.success({
+      statusCode: StatusCodes.CREATED,
+      message: 'Challenge created successfully.',
+      data: {
+        challenge,
+      },
+    })
+    return response.status(StatusCodes.CREATED).json(successResponse)
   }
 
   async findAll({ auth, request, response }: HttpContext) {
@@ -86,13 +98,22 @@ export default class ChallengesController {
     })
 
     if (error !== null) {
-      response
-        .status(error.status)
-        .json(NepoarResponse.failure(error, 'Challenges could not be fetched at the moment.'))
+      const errorResponse = NepolarResponse.error({
+        statusCode: StatusCodes.UNPROCESSABLE_ENTITY,
+        message: 'Challenges could not be fetched at the moment.',
+        error: error,
+      })
+      response.status(error.status).json(errorResponse)
     }
 
-    return response
-      .safeStatus(StatusCodes.OK)
-      .json(NepoarResponse.success(challenges, 'Challenges fetched successfully.'))
+    const successResponse = NepolarResponse.success({
+      statusCode: StatusCodes.OK,
+      message: 'Challenges fetched successfully.',
+      data: {
+        challenges,
+      },
+    })
+
+    return response.safeStatus(StatusCodes.OK).json(successResponse)
   }
 }

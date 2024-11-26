@@ -1,3 +1,4 @@
+import { SuccessResponse } from '#sharedTypes/server-response'
 import { Tag } from './tag'
 
 export type Challenge = {
@@ -10,3 +11,7 @@ export type Challenge = {
   createdAt: string
   updatedAt: string
 }
+
+export type CreateChallengeResponse = SuccessResponse<{
+  challenge: Challenge
+}>
