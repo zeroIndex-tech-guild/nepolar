@@ -1,4 +1,5 @@
 import { router } from '@inertiajs/react'
+import { Trash2 } from 'lucide-react'
 import { toast } from 'sonner'
 import {
   AlertDialog,
@@ -11,7 +12,7 @@ import {
   AlertDialogTitle,
   AlertDialogTrigger,
 } from '~/components/ui/alert-dialog'
-import { Button, LoadingButton } from '~/components/ui/button'
+import { LoadingButton } from '~/components/ui/button'
 import { useDeleteChallenge } from '~/hooks/challenges/useDeleteChallange'
 
 export const DeleteChallengeAlert = ({ challengeId }: { challengeId: string }) => {
@@ -32,7 +33,7 @@ export const DeleteChallengeAlert = ({ challengeId }: { challengeId: string }) =
   return (
     <AlertDialog>
       <AlertDialogTrigger asChild>
-        <Button variant="destructive">Delete</Button>
+        <Trash2 size={32} className="hover:text-red-500 cursor-pointer" />
       </AlertDialogTrigger>
       <AlertDialogContent>
         <AlertDialogHeader>
@@ -45,7 +46,9 @@ export const DeleteChallengeAlert = ({ challengeId }: { challengeId: string }) =
         <AlertDialogFooter className="items-center">
           <AlertDialogCancel>Cancel</AlertDialogCancel>
           <AlertDialogAction onClick={onClick} asChild>
-            <LoadingButton isLoading={deleteChallengeIsLoading}>Continue</LoadingButton>
+            <LoadingButton isLoading={deleteChallengeIsLoading} variant={'destructive'}>
+              Continue
+            </LoadingButton>
           </AlertDialogAction>
         </AlertDialogFooter>
       </AlertDialogContent>

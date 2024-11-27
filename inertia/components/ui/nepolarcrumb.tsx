@@ -1,4 +1,5 @@
 import { Link, usePage } from '@inertiajs/react'
+import React from 'react'
 import {
   Breadcrumb,
   BreadcrumbItem,
@@ -18,7 +19,6 @@ const IGNORED_PATHS = ['dashboard']
 
 export const NepolarCrumb = () => {
   const { url } = usePage()
-  console.log({ url })
   const paths = url.split('/').filter(Boolean)
 
   if (IGNORED_PATHS.includes(paths[0])) {
@@ -32,8 +32,8 @@ export const NepolarCrumb = () => {
   }))
 
   const crumbItems = crumbs.map(({ label, href, disabled }, index) => (
-    <>
-      <BreadcrumbItem key={label}>
+    <React.Fragment key={label}>
+      <BreadcrumbItem>
         <BreadcrumbLink asChild>
           <Link
             href={href}
@@ -46,7 +46,7 @@ export const NepolarCrumb = () => {
       </BreadcrumbItem>
 
       {index < crumbs.length - 1 && <BreadcrumbSeparator />}
-    </>
+    </React.Fragment>
   ))
 
   return (

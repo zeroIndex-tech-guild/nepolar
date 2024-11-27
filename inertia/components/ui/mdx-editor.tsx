@@ -1,4 +1,4 @@
-import React, { ForwardedRef, useCallback } from 'react'
+import { ForwardedRef } from 'react'
 import {
   BoldItalicUnderlineToggles,
   ChangeCodeMirrorLanguage,
@@ -10,7 +10,6 @@ import {
   MDXEditorMethods,
   MDXEditorProps,
   MDXEditor as OGMDXEditor,
-  SandpackConfig,
   ShowSandpackInfo,
   UndoRedo,
 } from '@mdxeditor/editor'
@@ -57,36 +56,36 @@ import { cn } from '~/lib/utils'
 //  readOnly?: boolean
 //}
 
-type Props = { editorRef: ForwardedRef<MDXEditorMethods> | null } & MDXEditorProps
+type Props = { editorRef?: ForwardedRef<MDXEditorMethods> | null } & MDXEditorProps
 
 // Default Sandpack snippet content
-const defaultSnippetContent = `
-export default function App() {
-  return (
-    <div className="App">
-      <h1>Hello CodeSandbox</h1>
-      <h2>Start editing to see some magic happen!</h2>
-    </div>
-  );
-}
-`.trim()
+//const defaultSnippetContent = `
+//export default function App() {
+//  return (
+//    <div className="App">
+//      <h1>Hello CodeSandbox</h1>
+//      <h2>Start editing to see some magic happen!</h2>
+//    </div>
+//  );
+//}
+//`.trim()
 
 // Simple Sandpack configuration for React
-const simpleSandpackConfig: SandpackConfig = {
-  defaultPreset: 'react',
-  presets: [
-    {
-      label: 'React',
-      name: 'react',
-      meta: 'live react',
-      sandpackTemplate: 'react',
-      sandpackTheme: 'light',
-      snippetFileName: '/App.js',
-      snippetLanguage: 'jsx',
-      initialSnippetContent: defaultSnippetContent,
-    },
-  ],
-}
+//const simpleSandpackConfig: SandpackConfig = {
+//  defaultPreset: 'react',
+//  presets: [
+//    {
+//      label: 'React',
+//      name: 'react',
+//      meta: 'live react',
+//      sandpackTemplate: 'react',
+//      sandpackTheme: 'light',
+//      snippetFileName: '/App.js',
+//      snippetLanguage: 'jsx',
+//      initialSnippetContent: defaultSnippetContent,
+//    },
+//  ],
+//}
 
 export const MDXEditor = ({
   markdown = '',
