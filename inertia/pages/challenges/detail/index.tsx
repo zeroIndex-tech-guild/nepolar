@@ -6,6 +6,7 @@ import { Typography } from '~/components/ui/typography'
 import { Challenge } from '~/types/challenge'
 import { DeleteChallengeAlert } from '../components/delete-challenge-alert'
 import { Edit2 } from 'lucide-react'
+import { TagsDisplay } from '~/components/ui/tags-display'
 
 type Props = {
   challenge: Challenge
@@ -14,6 +15,9 @@ type Props = {
 
 export default function ChallengeDetailPage(props: Props) {
   const { challenge, challengeId } = props
+
+  const tags = challenge.tags.map((tag) => tag.name)
+
   return (
     <div>
       <header className="flex items-center gap-8 group">
@@ -35,7 +39,13 @@ export default function ChallengeDetailPage(props: Props) {
           <Link href={`${challengeId}/logs`}>Show all Logs</Link>
         </Button>
       </div>
-      <MDXEditor markdown={challenge.description} readOnly={true} />
+
+      <article>
+        <div className="flex gap-2">
+          <TagsDisplay tags={tags} />
+        </div>
+        <MDXEditor markdown={challenge.description} readOnly={true} />
+      </article>
     </div>
   )
 }

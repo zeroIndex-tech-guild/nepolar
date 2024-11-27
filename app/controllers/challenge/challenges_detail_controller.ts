@@ -5,6 +5,7 @@ import { updateChallengeValidator } from '#validators/challenge/update'
 import { inject } from '@adonisjs/core'
 import { ChallengeService } from '#services/challenge/index'
 import { StatusCodes } from 'http-status-codes'
+import Tag from '#models/tag'
 
 @inject()
 export default class ChallengesController {
@@ -57,8 +58,14 @@ export default class ChallengesController {
     const challengeId = request.param('challengeId')
 
     try {
-      const challenge = await Challenge.findOrFail(challengeId)
+      //const challenge = await Challenge.findOrFail(challengeId)
+      const challenge = await Challenge.query()
+        .where('id', challengeId)
+        .preload('tags')
+        .firstOrFail()
+
       const message = `Challenge found: ${challenge.name}`
+      console.log(challenge, 'challenge is here')
       const successResponse = NepolarResponse.success({
         statusCode: StatusCodes.OK,
         data: { challenge },
@@ -86,6 +93,17 @@ export default class ChallengesController {
       const challenge = await Challenge.findOrFail(challengeId)
       challenge.merge(payload)
       await challenge.save()
+
+      if (payload.tags) {
+        const tagInstances = await Promise.all(
+          payload.tags.map(async (tagName: string) => {
+            return await Tag.firstOrCreate({ name: tagName })
+          })
+        )
+
+        await challenge.related('tags').sync(tagInstances.map((tag) => tag.id))
+      }
+      await challenge.load('tags')
 
       const message = `Challenge updated: ${challenge.name}`
       const successResponse = NepolarResponse.success({

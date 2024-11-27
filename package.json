@@ -33,7 +33,8 @@
     "#endpoints": "./app/endpoints/index.js",
     "#errorCode": "./app/constants/error-code.js",
     "#sharedTypes/*": "./types/*.js",
-    "#lib/*": "./app/lib/*.js"
+    "#lib/*": "./app/lib/*.js",
+    "#types/*": "./app/types/*.js"
   },
   "devDependencies": {
     "@adonisjs/assembler": "^7.8.2",

@@ -93,58 +93,68 @@ export const MDXEditor = ({
   onChange,
   readOnly = true,
 }: Props) => {
+  const toolBarPlugin = toolbarPlugin({
+    toolbarContents: () => {
+      return (
+        <>
+          <UndoRedo />
+          <BoldItalicUnderlineToggles />
+          <InsertFrontmatter />
+          <ConditionalContents
+            options={[
+              {
+                when: (editor) => editor?.editorType === 'codeblock',
+                contents: () => <ChangeCodeMirrorLanguage />,
+              },
+              {
+                when: (editor) => editor?.editorType === 'sandpack',
+                contents: () => <ShowSandpackInfo />,
+              },
+              {
+                fallback: () => (
+                  <>
+                    <InsertCodeBlock />
+                    <InsertSandpack />
+                  </>
+                ),
+              },
+            ]}
+          />
+        </>
+      )
+    },
+  })
+
+  const plugins = [
+    headingsPlugin(),
+    listsPlugin(),
+    quotePlugin(),
+    thematicBreakPlugin(),
+    linkPlugin(),
+    linkDialogPlugin(),
+    imagePlugin(),
+    tablePlugin(),
+    markdownShortcutPlugin(),
+  ]
+
+  if (!readOnly) {
+    plugins.push(toolBarPlugin)
+  }
+
   try {
     return (
       <OGMDXEditor
         readOnly={readOnly}
         markdown={markdown}
-        plugins={[
-          headingsPlugin(),
-          listsPlugin(),
-          quotePlugin(),
-          thematicBreakPlugin(),
-          linkPlugin(),
-          linkDialogPlugin(),
-          imagePlugin(),
-          tablePlugin(),
-          markdownShortcutPlugin(),
-          toolbarPlugin({
-            toolbarContents: () => {
-              if (readOnly) return <></>
-
-              return (
-                <>
-                  <UndoRedo />
-                  <BoldItalicUnderlineToggles />
-                  <InsertFrontmatter />
-                  <ConditionalContents
-                    options={[
-                      {
-                        when: (editor) => editor?.editorType === 'codeblock',
-                        contents: () => <ChangeCodeMirrorLanguage />,
-                      },
-                      {
-                        when: (editor) => editor?.editorType === 'sandpack',
-                        contents: () => <ShowSandpackInfo />,
-                      },
-                      {
-                        fallback: () => (
-                          <>
-                            <InsertCodeBlock />
-                            <InsertSandpack />
-                          </>
-                        ),
-                      },
-                    ]}
-                  />
-                </>
-              )
-            },
-          }),
-        ]}
+        plugins={plugins}
+        //contentEditableClassName={cn(
+        //  'prose dark:text-gray-300 rounded-md min-h-[450px]',
+        //  !readOnly && 'border border-gray-300',
+        //  contentEditableClassName
+        //)}
         contentEditableClassName={cn(
-          'prose dark:text-gray-300 rounded-md min-h-[450px]',
-          !readOnly && 'border border-gray-300',
+          'prose dark:text-gray-300 min-h-screen max-w-3xl mx-auto p-6',
+          !readOnly && 'border border-gray-300 bg-white shadow-sm rounded-lg',
           contentEditableClassName
         )}
         onChange={onChange}

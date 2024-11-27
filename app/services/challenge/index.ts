@@ -1,4 +1,5 @@
 import Challenge from '#models/challenge'
+import Tag from '#models/tag'
 import { CreateChallenge } from '#types/challenge'
 
 export class ChallengeService {
@@ -10,11 +11,16 @@ export class ChallengeService {
         userId,
       })
 
-      const mappedTags = tags.map((tag) => ({ name: tag }))
+      const tagInstances = await Promise.all(
+        tags.map(async (tagName) => {
+          return await Tag.firstOrCreate({ name: tagName })
+        })
+      )
 
-      newChallenge.related('tags').createMany(mappedTags)
+      await newChallenge.related('tags').attach(tagInstances.map((tag) => tag.id))
 
-      //newChallenge.related('tags').load()
+      await newChallenge.load('tags')
+
       return {
         challenge: newChallenge,
         error: null,
