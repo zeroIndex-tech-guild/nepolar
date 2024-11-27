@@ -6,18 +6,14 @@ import { User } from '~/types/user'
 import { LoginResponse } from '~/types/auth'
 import { router } from '@inertiajs/react'
 
-const login: MutationFunction<SuccessResponse<{ user: User }>> = async (data) => {
-  const resposne = await axiosInstance.post('auth/login', data)
-  console.log({ resposne })
-  return resposne
-}
+const login: MutationFunction<SuccessResponse<{ user: User }>> = async (data) =>
+  axiosInstance.post('auth/login', data)
 
 export const useLogin = () => {
   const loginMutation = useMutation<LoginResponse>({
     mutationKey: ['login'],
     mutationFn: login,
     onSuccess: (data) => {
-      console.log(data, data.message, 'm here')
       toast.success(data.message)
       router.replace('/dashboard')
     },
