@@ -17,8 +17,7 @@ export default function SignupPage() {
   const { signup } = useSignup()
 
   const onHandleSubmit: SubmitHandler<TSignupValues> = async (data) => {
-    const response = await signup(data)
-    console.log({ response })
+    await signup(data)
   }
 
   return (

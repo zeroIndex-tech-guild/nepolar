@@ -23,9 +23,10 @@ export const AxiosProvider = ({ children }: { children: React.ReactNode }) => {
   // Attach response interceptor
   axiosInstance.interceptors.response.use(
     (response) => {
-      // Successfully received response
-      console.log('rd', response.data)
-      return response.data
+      if (response && response.data.data) {
+        return response.data
+      }
+      return response
     },
     (error) => {
       // Handle errors from server responses

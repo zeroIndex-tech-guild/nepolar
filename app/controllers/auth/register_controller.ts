@@ -54,6 +54,10 @@ export default class RegisterController {
         message = 'User with this email already exists.'
       }
 
+      if (error.constraint === 'users_user_name_unique') {
+        message = 'User with this username already exists.'
+      }
+
       if (error.code === E_VALIDATION_ERROR) {
         const errorResponse = NepolarResponse.error({
           statusCode: StatusCodes.BAD_REQUEST,

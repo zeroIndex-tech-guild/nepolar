@@ -20,7 +20,7 @@ export const useSignup = () => {
         router.get('/login')
       },
       onError: (error) => {
-        console.log({ error })
+        error.error.forEach(({ message }) => toast.error(message))
       },
     }
   )
