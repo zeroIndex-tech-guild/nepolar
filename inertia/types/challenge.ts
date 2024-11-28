@@ -15,3 +15,7 @@ export type Challenge = {
 export type CreateChallengeResponse = SuccessResponse<{
   challenge: Challenge
 }>
+
+export type UpdateChallengeResponse = CreateChallengeResponse
+
+export type DeleteChallengeResponse = SuccessResponse<null>

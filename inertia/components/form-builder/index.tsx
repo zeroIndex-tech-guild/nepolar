@@ -1,4 +1,4 @@
-import { ControllerRenderProps, UseFormReturn } from 'react-hook-form'
+import { ControllerProps, ControllerRenderProps, UseFormReturn } from 'react-hook-form'
 import { FormControl, FormField, FormItem, FormLabel, FormMessage } from '~/components/ui/form'
 import { Input } from '~/components/ui/input'
 import { MDXEditor } from '../ui/mdx-editor'
@@ -25,7 +25,7 @@ type TSelectField = {
 type TCustomField = {
   name: string
   type: 'custom'
-  render: (field: ControllerRenderProps) => JSX.Element
+  render: (field: ControllerProps<any>) => JSX.Element
 }
 
 export type Field = TCustomField | TInputElField | TSelectField
@@ -34,14 +34,16 @@ type FieldGeneratorProps = {
   field: Field
   form: UseFormReturn<any>
 }
+
 export const FieldGenerator = (props: FieldGeneratorProps) => {
   const { form, field } = props
   const { type, name } = field
   const control = form.control
 
-  switch (type) {
+  switch (field.type) {
     case 'custom':
-      return <FormField key={name} control={control} name={name} render={props.field.render} />
+      // @ts-ignore
+      return <FormField key={name} control={control} name={name} render={field.render} />
     case 'text':
     case 'email':
     case 'password':
@@ -94,7 +96,7 @@ export const FieldGenerator = (props: FieldGeneratorProps) => {
                   readOnly={false}
                   markdown={value}
                   onChange={onChange}
-                  imageDropHandler={async () => ''}
+                  //imageDropHandler={async () => ''}
                 />
               </FormControl>
               <FormMessage className="text-red-500" />

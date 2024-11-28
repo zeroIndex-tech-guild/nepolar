@@ -1,34 +1,22 @@
 import { LogService } from '#services/log/index'
 import type { HttpContext } from '@adonisjs/core/http'
-import { NepoarResponse } from '../../lib/nepolar-response.js'
 import { StatusCodes } from 'http-status-codes'
 import {
   deleteLogValidator,
-  findLogValidator,
-  renderCreateLogPageValidator,
+  renderEditLogPageValidator,
   updateLogValidator,
 } from '#validators/log/index'
 import { inject } from '@adonisjs/core'
+import { NepolarResponse } from '#lib/nepolar-response'
 
 @inject()
 export default class LogsDetailsController {
   constructor(protected logService: LogService) {}
 
-  async renderCreateNewLogPage({ inertia, request }: HttpContext) {
+  async renderEditLogPage({ inertia, request }: HttpContext) {
     const {
       params: { challengeId, logId },
-    } = await request.validateUsing(renderCreateLogPageValidator)
-
-    const isEditPage = String(challengeId) !== 'create'
-
-    if (!isEditPage) {
-      return inertia.render('logs/create/index', {
-        log: null,
-        logId,
-        challengeId,
-        error: null,
-      })
-    }
+    } = await request.validateUsing(renderEditLogPageValidator)
 
     const { error, log } = await this.logService.find(logId)
 
@@ -49,47 +37,77 @@ export default class LogsDetailsController {
     })
   }
 
-  async renderLogPage({ inertia, request }: HttpContext) {
-    const { logId } = await request.validateUsing(findLogValidator)
-
-    const { error, log } = await this.logService.find(logId)
-
-    if (error !== null) {
-      return inertia.render('logs/index', {
-        log: null,
-      })
-    }
-
-    return inertia.render('logs/index', {
-      log,
-    })
-  }
-
   async find({ params, response }: HttpContext) {
     const { id } = params
     const { error, log } = await this.logService.find(id)
 
     if (error !== null) {
-      return response
-        .status(StatusCodes.BAD_GATEWAY)
-        .json(NepoarResponse.failure(error, 'Failed to fetch log'))
+      const errorResponse = NepolarResponse.error({
+        statusCode: StatusCodes.BAD_REQUEST,
+        message: 'Failed to fetch log',
+        error: [
+          {
+            details: error.messages,
+            message: 'Please provide valid and required data.',
+            code: 'E_VALIDATION_ERROR',
+          },
+        ],
+      })
+
+      return response.status(StatusCodes.BAD_REQUEST).json(errorResponse)
     }
 
-    return NepoarResponse.success(log, 'Log fetched successfully')
+    const successResponse = NepolarResponse.success({
+      statusCode: StatusCodes.OK,
+      data: { log },
+      message: 'Log fetched successfully',
+    })
+
+    return response.status(StatusCodes.OK).json(successResponse)
   }
 
   async update({ request, response }: HttpContext) {
     const { params, ...rest } = await request.validateUsing(updateLogValidator)
 
+    if (!params.logId) {
+      const errorResponse = NepolarResponse.error({
+        statusCode: StatusCodes.BAD_REQUEST,
+        message: 'Failed to update log',
+        error: [
+          {
+            details: 'Please provide valid and required data.',
+            message: 'Please provide valid and required data.',
+            code: 'E_VALIDATION_ERROR',
+          },
+        ],
+      })
+      return response.status(StatusCodes.BAD_REQUEST).json(errorResponse)
+    }
+
     const { error, log: updatedLog } = await this.logService.update(params.logId, rest)
 
     if (error !== null) {
-      return response
-        .status(StatusCodes.BAD_GATEWAY)
-        .json(NepoarResponse.failure(error, 'Failed to update log'))
+      const errorResponse = NepolarResponse.error({
+        statusCode: StatusCodes.BAD_REQUEST,
+        message: 'Failed to update log',
+        error: [
+          {
+            details: error.messages,
+            message: 'Please provide valid and required data.',
+            code: 'E_VALIDATION_ERROR',
+          },
+        ],
+      })
+      return response.status(StatusCodes.BAD_REQUEST).json(errorResponse)
     }
 
-    return NepoarResponse.success(updatedLog, 'Log updated successfully')
+    const successResponse = NepolarResponse.success({
+      statusCode: StatusCodes.OK,
+      data: { log: updatedLog },
+      message: 'Log updated successfully',
+    })
+
+    return response.status(StatusCodes.OK).json(successResponse)
   }
 
   async delete({ request, response }: HttpContext) {
@@ -99,11 +117,27 @@ export default class LogsDetailsController {
     const { error } = await this.logService.delete(logId)
 
     if (error !== null) {
-      return response
-        .status(StatusCodes.BAD_GATEWAY)
-        .json(NepoarResponse.failure(error, 'Failed to delete log'))
+      const errorResponse = NepolarResponse.error({
+        statusCode: StatusCodes.BAD_REQUEST,
+        message: 'Failed to delete log',
+        error: [
+          {
+            details: error.messages,
+            message: 'Please provide valid and required data.',
+            code: 'E_VALIDATION_ERROR',
+          },
+        ],
+      })
+
+      return response.status(StatusCodes.BAD_REQUEST).json(errorResponse)
     }
 
-    return NepoarResponse.success(null, 'Log deleted successfully')
+    const successResponse = NepolarResponse.success({
+      statusCode: StatusCodes.OK,
+      message: 'Log deleted successfully',
+      data: null,
+    })
+
+    return response.status(StatusCodes.OK).json(successResponse)
   }
 }

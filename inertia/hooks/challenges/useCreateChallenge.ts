@@ -8,9 +8,7 @@ import { ErrorResponse } from '#sharedTypes/server-response'
 export const useCreateChallenge = () => {
   const mutate = useMutation<CreateChallengeResponse, ErrorResponse, ChallengeFormValues>({
     mutationKey: [CHALLENGES_QK],
-    mutationFn: async (data) => {
-      return await axiosInstance.post('/challenges', data)
-    },
+    mutationFn: async (data) => await axiosInstance.post('/challenges', data),
   })
 
   return {

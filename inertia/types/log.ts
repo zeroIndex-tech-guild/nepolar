@@ -1,3 +1,5 @@
+import { SuccessResponse } from '#sharedTypes/server-response'
+
 export type Log = {
   id: string
   title: string
@@ -8,3 +10,11 @@ export type Log = {
   createdAt: Date
   updatedAt: Date
 }
+
+export type CreateLogResponse = SuccessResponse<{
+  log: Log
+}>
+
+export type UpdateLogResponse = CreateLogResponse
+
+export type DeleteLogResponse = SuccessResponse<null>

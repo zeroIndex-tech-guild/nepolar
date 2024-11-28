@@ -82,11 +82,17 @@ router.group(() => {
        */
       router
         .group(() => {
+          // shows the list of logs
           router.get('', [LogsListController, 'renderLogsPage']).as('list_page')
 
-          router.get('/:logId', [LogsDetailsController, 'renderCreateNewLogPage']).as('detail_page')
+          // creates a new log
+          router.get('/create', [LogsListController, 'renderCreateLogPage']).as('create_page')
 
-          router.get('/:logId/edit', [LogsDetailsController, 'renderLogPage']).as('create_edit')
+          // shows the log detail
+          router.get('/:logId', [LogsDetailsController, 'renderEditLogPage']).as('detail_page')
+
+          // edit the log
+          router.get('/:logId/edit', [LogsDetailsController, 'renderEditLogPage']).as('create_edit')
         })
         .prefix('/:challengeId/logs')
         .as('logs-page')

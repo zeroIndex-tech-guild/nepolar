@@ -1,8 +1,12 @@
+import { NepolarResponse } from '#lib/nepolar-response'
 import { LogService } from '#services/log/index'
-import { createLogValidator, findAllLogsValidator } from '#validators/log/index'
+import {
+  createLogValidator,
+  findAllLogsValidator,
+  renderCreateLogPageValidator,
+} from '#validators/log/index'
 import { inject } from '@adonisjs/core'
 import type { HttpContext } from '@adonisjs/core/http'
-import { NepoarResponse } from '../../lib/nepolar-response.js'
 import { StatusCodes } from 'http-status-codes'
 
 @inject()
@@ -34,7 +38,20 @@ export default class LogsListsController {
     })
   }
 
+  async renderCreateLogPage({ inertia, request }: HttpContext) {
+    const {
+      params: { challengeId },
+    } = await request.validateUsing(renderCreateLogPageValidator)
+
+    return inertia.render('logs/create/index', {
+      log: null,
+      error: null,
+      challengeId,
+    })
+  }
+
   async create({ request, response }: HttpContext) {
+    console.log('create', request.params())
     const { params, content, title } = await request.validateUsing(createLogValidator)
     console.log({ params, content, title })
 
@@ -44,12 +61,20 @@ export default class LogsListsController {
     )
 
     if (error !== null) {
-      return response
-        .status(StatusCodes.BAD_GATEWAY)
-        .json(NepoarResponse.failure(error, 'Failed to create log'))
+      const errorResponse = NepolarResponse.error({
+        statusCode: StatusCodes.BAD_GATEWAY,
+        message: 'Failed to create log',
+        error: [error],
+      })
+      return response.status(StatusCodes.BAD_GATEWAY).json(errorResponse)
     }
 
-    return NepoarResponse.success(newLog, 'Log created successfully')
+    const successResponse = NepolarResponse.success({
+      data: newLog,
+      message: 'Log created successfully',
+      statusCode: StatusCodes.CREATED,
+    })
+    return response.status(StatusCodes.CREATED).json(successResponse)
   }
 
   async findMany({ request, response }: HttpContext) {
@@ -67,11 +92,20 @@ export default class LogsListsController {
     })
 
     if (error !== null) {
-      return response
-        .status(StatusCodes.BAD_GATEWAY)
-        .json(NepoarResponse.failure(error, 'Failed to fetch logs'))
+      const errorResponse = NepolarResponse.error({
+        statusCode: StatusCodes.BAD_GATEWAY,
+        message: 'Failed to fetch logs',
+        error: [error],
+      })
+
+      return response.status(StatusCodes.BAD_GATEWAY).json(errorResponse)
     }
 
-    return NepoarResponse.success(logs, 'Logs fetched successfully')
+    const successResponse = NepolarResponse.success({
+      data: logs,
+      message: 'Logs fetched successfully',
+      statusCode: StatusCodes.OK,
+    })
+    return response.status(StatusCodes.OK).json(successResponse)
   }
 }

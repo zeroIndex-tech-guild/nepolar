@@ -2,11 +2,15 @@ import { useMutation } from '@tanstack/react-query'
 import { axiosInstance } from '~/components/providers/axios-provider'
 import { LogFormValues } from '~/pages/logs/create/forms'
 import { LOGS_QK } from './query-key'
+import { CreateLogResponse } from '~/types/log'
+import { ErrorResponse } from '#sharedTypes/server-response'
+
+type Props = LogFormValues & { challengeId: string }
 
 export const useCreateLog = () => {
-  const mutate = useMutation({
+  const mutate = useMutation<CreateLogResponse, ErrorResponse, Props>({
     mutationKey: [LOGS_QK],
-    mutationFn: async (data: LogFormValues & { challengeId: number }) => {
+    mutationFn: async (data) => {
       const { challengeId, ...rest } = data
       return await axiosInstance.post(`/challenges/${challengeId}/logs`, rest)
     },

@@ -1,6 +1,6 @@
 import { PageProps } from '@adonisjs/inertia/types'
 import { HttpContext } from '@adonisjs/core/http'
-import { ServerResponse } from '#sharedTypes/server-response'
+import { INepolarResponse } from '#sharedTypes/server-response'
 
 export interface ICrudListController<T> {
   /**
@@ -19,13 +19,13 @@ export interface ICrudListController<T> {
    * API endpoint to fetch a list of resources.
    * @route [GET] 'api/challenges'
    */
-  findMany(context: HttpContext): Promise<ServerResponse<T[]>>
+  findMany(context: HttpContext): Promise<INepolarResponse<T[]>>
 
   /**
    * API endpoint to create a new resource.
    * @route [POST] '/api/challenges'
    */
-  create(context: HttpContext): Promise<ServerResponse<T>>
+  create(context: HttpContext): Promise<INepolarResponse<T>>
 }
 
 export interface ICrudDetailsController<T> {
@@ -46,17 +46,17 @@ export interface ICrudDetailsController<T> {
    * API endpoint to fetch a single resource.
    * @route [GET] 'api/challenges/:challengeId'
    */
-  findOne(context: HttpContext): Promise<ServerResponse<T>>
+  findOne(context: HttpContext): Promise<INepolarResponse<T>>
 
   /**
    * API endpoint to update a specific resource.
    * @route [PUT] 'api/challenges/:challengeId'
    */
-  update(context: HttpContext): Promise<ServerResponse<T>>
+  update(context: HttpContext): Promise<INepolarResponse<T>>
 
   /**
    * API endpoint to delete a specific resource.
    * @route [DELETE] 'api/challenges/:challengeId'
    */
-  delete(context: HttpContext): Promise<ServerResponse<T>>
+  delete(context: HttpContext): Promise<INepolarResponse<T>>
 }

@@ -10,16 +10,17 @@ import { toast } from 'sonner'
 import { router } from '@inertiajs/react'
 import { Log } from '~/types/log'
 import { useUpdateLog } from '~/hooks/logs/useUpdateLog'
+import { DeleteLogAlert } from '../components/delete-log-alert'
 
 type Props = {
-  challengeId: number
+  challengeId: string
   logId: string
   log: Log | null
   error: Error | null
 }
 
 export default function LogCreationUpdatePage(props: Props) {
-  const { challengeId, logId, log } = props
+  const { challengeId, logId = null, log } = props
 
   const form = useForm({
     defaultValues: log || defaultValues,
@@ -27,18 +28,19 @@ export default function LogCreationUpdatePage(props: Props) {
   })
 
   const { createLog, createLogIsLoading } = useCreateLog()
-  const { updateLog, updateLogIsLoading } = useUpdateLog(logId)
+  const { updateLog, updateLogIsLoading } = useUpdateLog()
 
-  const isEditPage = String(challengeId) !== 'create'
+  const isEditPage = Boolean(logId)
   const buttonLabel = isEditPage ? 'Update Log' : 'Create Log'
   const title = isEditPage ? 'Edit Log' : 'Create Log'
 
   const onSubmitHandler: SubmitHandler<LogFormValues> = async (formData) => {
-    if (isEditPage) {
+    if (isEditPage && logId) {
       await updateLog(
         {
           ...formData,
           challengeId,
+          logId,
         },
         {
           onSuccess: () => {
@@ -72,7 +74,11 @@ export default function LogCreationUpdatePage(props: Props) {
 
   return (
     <div>
-      <Typography.H1>{title}</Typography.H1>
+      <header className="flex items-center gap-4">
+        <Typography.H1>{title}</Typography.H1>
+
+        {isEditPage && logId && <DeleteLogAlert challengeId={challengeId} logId={logId} />}
+      </header>
 
       <Form {...form}>
         <form onSubmit={form.handleSubmit(onSubmitHandler)}>
