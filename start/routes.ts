@@ -40,7 +40,7 @@ const LogsDetailsController = () => import('#controllers/log/logs_details_contro
  * BLOGS CONTROLLERS
  */
 const BlogsListController = () => import('#controllers/blog/blogs_list_controller')
-
+const BlogDetailController = () => import('#controllers/blog/blog_detail_controller')
 /*
  *
 |--------------------------------------------------------------------------
@@ -114,6 +114,7 @@ router.group(() => {
     .group(() => {
       router.get('', [BlogsListController, 'renderBlogsListPage']).as('list_page')
       router.get('/create', [BlogsListController, 'renderBlogsCreatePage']).as('create')
+      router.get('/:blogId', [BlogDetailController, 'renderBlogDetailPage']).as('detail_page')
     })
     .prefix('/:userId/blogs')
     .as('user_blogs')

@@ -58,16 +58,16 @@ export class BlogService {
     }
   }
 
-  async fineOne(blogId: number) {
+  async findOne(blogId: string) {
     try {
-      const blog = await Blog.find(blogId)
+      const blog = await Blog.query().where('id', blogId).preload('user').firstOrFail()
       return {
         data: blog,
         error: null,
       }
     } catch (error) {
       return {
-        blog: null,
+        data: null,
         error,
       }
     }

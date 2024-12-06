@@ -153,7 +153,7 @@ export const MDXEditor = ({
         //  contentEditableClassName
         //)}
         contentEditableClassName={cn(
-          'prose dark:text-gray-300 min-h-screen max-w-3xl mx-auto p-6',
+          'prose dark:text-gray-300 min-h-screen max-w-3xl mx-auto',
           !readOnly && 'border border-gray-300 bg-white shadow-sm rounded-lg',
           contentEditableClassName
         )}
