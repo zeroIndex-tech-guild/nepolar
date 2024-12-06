@@ -1,4 +1,4 @@
-import { RegistrationData } from "#types/auth";
+import { RegistrationData } from '#types/auth'
 
 export const john: RegistrationData = {
   fullName: 'John Doe',

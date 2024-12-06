@@ -2,7 +2,6 @@
 @tailwind components;
 @tailwind utilities;
 
-
 @layer base {
   :root {
     --background: 0 0% 100%;
@@ -85,8 +84,7 @@
   }
 }
 
-.mdxeditor-root-content , .mdxeditor-root-contenteditable{
+.mdxeditor-root-content,
+.mdxeditor-root-contenteditable {
   width: 500px;
 }
-
-
