@@ -22,6 +22,7 @@ export class BlogService {
         error: null,
       }
     } catch (error) {
+      console.log({ error })
       return {
         data: null,
         error,

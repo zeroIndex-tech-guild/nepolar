@@ -18,9 +18,10 @@ export default function BlogDetailPage(props: Props) {
   return (
     <div>
       <header>
-        <div className="flex gap-4 items-center">
+        <div className="flex gap-4 items-center group">
           <Typography.H1 className="mb-2">{blog.title}</Typography.H1>
-          <div className="flex gap-2">
+
+          <div className="flex items-center gap-2 opacity-0 group-hover:opacity-100">
             <DeleteBlogAlert blogId={blog.id} />
 
             <Link href={`/blogs/${blog.id}/edit`}>

@@ -8,6 +8,8 @@ import { Button } from '~/components/ui/button'
 import { useCreateBlog } from '~/hooks/blogs/useCreateBlog'
 import { Blog } from '~/types/blog'
 import { useUpdateBlog } from '~/hooks/blogs/useUpdateBlog'
+import { toast } from 'sonner'
+import { router } from '@inertiajs/react'
 
 type Props = {
   blog: Blog
@@ -28,10 +30,28 @@ export default function BlogsCreatePage(props: Props) {
 
   const onSubmitHandler: SubmitHandler<BlogFormValues> = async (data) => {
     if (isEditPage) {
-      await updateBlog(data)
+      await updateBlog(data, {
+        onSuccess: (data) => {
+          toast.success(data.message)
+          router.replace(`/blogs/${data.data.id}`)
+        },
+        onError: (error) => {
+          toast.error(error.message)
+        },
+      })
       return
     }
-    await createBlog(data)
+
+    await createBlog(data, {
+      onSuccess: (data) => {
+        console.log(data)
+        toast.success(data.message)
+        router.replace(`/blogs/${data.data.id}`)
+      },
+      onError: (error) => {
+        toast.error(error.message)
+      },
+    })
   }
 
   const pageTitle = isEditPage ? `Edit ${blog?.title}` : 'Create Blog'

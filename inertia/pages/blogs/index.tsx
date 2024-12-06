@@ -21,7 +21,7 @@ export default function BlogsListPage(props: Props) {
         <Typography.H1>Blogs</Typography.H1>
         <div>
           <Button variant={'outline'}>
-            <Link href="/1/blogs/create">Create Blog</Link>
+            <Link href="/blogs/create">Create Blog</Link>
           </Button>
         </div>
       </header>

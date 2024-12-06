@@ -29,10 +29,10 @@ export default class BlogsListController {
     })
   }
 
-  async create({ request, response }: HttpContext) {
-    const { params, ...payload } = await request.validateUsing(createBlogValidator)
+  async create({ request, response, auth }: HttpContext) {
+    const payload = await request.validateUsing(createBlogValidator)
 
-    const userId = params.userId
+    const userId = auth.user?.id!
     const { data, error } = await this.blogsService.create(payload, userId)
 
     if (error !== null) {

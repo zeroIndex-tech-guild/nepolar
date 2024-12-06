@@ -12,8 +12,6 @@ export type Blog = {
   updatedAt: string
 }
 
-export type CreateBlogResponse = SuccessResponse<{
-  blog: Blog
-}>
+export type CreateBlogResponse = SuccessResponse<Blog>
 
 export type UpdateBlogResponse = CreateBlogResponse

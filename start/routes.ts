@@ -195,5 +195,6 @@ router
       })
       .prefix('/blogs')
       .as('user_blogs-api')
+      .use([middleware.auth()])
   })
   .prefix('/api')
