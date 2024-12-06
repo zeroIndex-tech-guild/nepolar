@@ -15,3 +15,5 @@ export type Blog = {
 export type CreateBlogResponse = SuccessResponse<{
   blog: Blog
 }>
+
+export type UpdateBlogResponse = CreateBlogResponse

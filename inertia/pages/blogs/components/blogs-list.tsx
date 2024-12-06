@@ -7,11 +7,12 @@ type Props = {
 
 export const BlogsList = (props: Props) => {
   const { blogs = [] } = props
+  console.log({ blogs })
 
   return (
     <ul className="flex flex-col gap-4">
       {blogs.map((blog) => (
-        <BlogListCard blog={blog} />
+        <BlogListCard blog={blog} key={blog.id} />
       ))}
     </ul>
   )

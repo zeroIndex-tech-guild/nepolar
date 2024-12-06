@@ -1,7 +1,10 @@
+import { Edit2 } from 'lucide-react'
 import { DashboardLayout } from '~/components/layouts/dashboard'
 import { MDXEditor } from '~/components/ui/mdx-editor'
 import { Typography } from '~/components/ui/typography'
 import { Blog } from '~/types/blog'
+import { DeleteBlogAlert } from '../components/delete-blog-alert'
+import { Link } from '@inertiajs/react'
 
 type Props = {
   blog: Blog
@@ -15,7 +18,16 @@ export default function BlogDetailPage(props: Props) {
   return (
     <div>
       <header>
-        <Typography.H1 className="mb-2">{blog.title}</Typography.H1>
+        <div className="flex gap-4 items-center">
+          <Typography.H1 className="mb-2">{blog.title}</Typography.H1>
+          <div className="flex gap-2">
+            <DeleteBlogAlert blogId={blog.id} />
+
+            <Link href={`/blogs/${blog.id}/edit`}>
+              <Edit2 className="hover:text-blue-500" />
+            </Link>
+          </div>
+        </div>
 
         <div className="flex gap-4">
           <Typography.Muted>By {blog.user.fullName}</Typography.Muted>

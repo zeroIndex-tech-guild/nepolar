@@ -115,8 +115,9 @@ router.group(() => {
       router.get('', [BlogsListController, 'renderBlogsListPage']).as('list_page')
       router.get('/create', [BlogsListController, 'renderBlogsCreatePage']).as('create')
       router.get('/:blogId', [BlogDetailController, 'renderBlogDetailPage']).as('detail_page')
+      router.get('/:blogId/edit', [BlogDetailController, 'renderBlogEditPage']).as('edit_page')
     })
-    .prefix('/:userId/blogs')
+    .prefix('/blogs')
     .as('user_blogs')
 
   /*
@@ -189,8 +190,10 @@ router
     router
       .group(() => {
         router.post('', [BlogsListController, 'create']).as('create')
+        router.put('/:blogId', [BlogDetailController, 'update']).as('update')
+        router.delete('/:blogId', [BlogDetailController, 'delete']).as('delete')
       })
-      .prefix('/:userId/blogs')
+      .prefix('/blogs')
       .as('user_blogs-api')
   })
   .prefix('/api')

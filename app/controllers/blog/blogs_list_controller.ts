@@ -22,7 +22,11 @@ export default class BlogsListController {
   }
 
   async renderBlogsCreatePage({ inertia }: HttpContext) {
-    return inertia.render('blogs/create/index')
+    return inertia.render('blogs/create/index', {
+      blog: null,
+      isEditPage: false,
+      blogId: 'new',
+    })
   }
 
   async create({ request, response }: HttpContext) {

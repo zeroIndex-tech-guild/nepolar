@@ -6,28 +6,47 @@ import { Form } from '~/components/ui/form'
 import { FieldsGenerator } from '~/components/form-builder'
 import { Button } from '~/components/ui/button'
 import { useCreateBlog } from '~/hooks/blogs/useCreateBlog'
+import { Blog } from '~/types/blog'
+import { useUpdateBlog } from '~/hooks/blogs/useUpdateBlog'
 
-export default function BlogsCreatePage() {
+type Props = {
+  blog: Blog
+  isEditPage: boolean
+  blogId: string
+}
+
+export default function BlogsCreatePage(props: Props) {
+  const { blogId, blog, isEditPage } = props
+
   const form = useForm({
-    defaultValues,
+    defaultValues: blog || defaultValues,
     resolver,
   })
+
   const { createBlog } = useCreateBlog()
+  const { updateBlog } = useUpdateBlog(blogId)
 
   const onSubmitHandler: SubmitHandler<BlogFormValues> = async (data) => {
+    if (isEditPage) {
+      await updateBlog(data)
+      return
+    }
     await createBlog(data)
   }
 
+  const pageTitle = isEditPage ? `Edit ${blog?.title}` : 'Create Blog'
+  const buttonLabel = isEditPage ? 'Update Blog' : 'Create Blog'
+
   return (
     <main>
-      <Typography.H1>Create Blog</Typography.H1>
+      <Typography.H1>{pageTitle}</Typography.H1>
 
       <Form {...form}>
         <form onSubmit={form.handleSubmit(onSubmitHandler)} className="flex flex-col gap-4">
           <FieldsGenerator fields={formFields} form={form} />
 
           <div>
-            <Button>Create Blog</Button>
+            <Button>{buttonLabel}</Button>
           </div>
         </form>
       </Form>

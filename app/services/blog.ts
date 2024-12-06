@@ -2,6 +2,7 @@ import Blog from '#models/blog'
 import { CreateBlog } from '#types/blog'
 import { inject } from '@adonisjs/core'
 import { SummaryGeneration } from './summary-generation.js'
+import { UpdateBlogValues } from '#validators/blogs'
 
 @inject()
 export class BlogService {
@@ -63,6 +64,38 @@ export class BlogService {
       const blog = await Blog.query().where('id', blogId).preload('user').firstOrFail()
       return {
         data: blog,
+        error: null,
+      }
+    } catch (error) {
+      return {
+        data: null,
+        error,
+      }
+    }
+  }
+
+  async update(blogId: string, payload: Omit<UpdateBlogValues, 'params'>) {
+    try {
+      const blog = await Blog.findOrFail(blogId)
+      await blog.merge(payload).save()
+      return {
+        data: blog,
+        error: null,
+      }
+    } catch (error) {
+      return {
+        data: null,
+        error,
+      }
+    }
+  }
+
+  async delete(blogId: string) {
+    try {
+      const blog = await Blog.findOrFail(blogId)
+      await blog.delete()
+      return {
+        data: null,
         error: null,
       }
     } catch (error) {

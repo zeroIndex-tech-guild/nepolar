@@ -2,7 +2,6 @@ import { Link } from '@inertiajs/react'
 import { Card, CardContent, CardHeader, CardTitle } from '~/components/ui/card'
 import { Typography } from '~/components/ui/typography'
 import { Blog } from '~/types/blog'
-import { userId } from '~/store/user-store'
 
 type Props = {
   blog: Blog
@@ -19,25 +18,25 @@ export const BlogListCard = (props: Props) => {
     },
   } = props
 
-  const url = `/${userId}/blogs/${id}`
+  const url = `/blogs/${id}`
 
   return (
-    <Link href={url}>
-      <Card className="hover:border-primary hover:bg-purple-800 transition cursor-pointer shadow-md">
-        <CardHeader>
-          <CardTitle>
-            <Typography.H2 className="capitalize">{title}</Typography.H2>
-          </CardTitle>
+    <li>
+      <Link href={url}>
+        <Card className="hover:border-primary hover:bg-purple-800 transition cursor-pointer shadow-md">
+          <CardHeader>
+            <CardTitle>
+              <Typography.H2 className="capitalize">{title}</Typography.H2>
+            </CardTitle>
 
-          <Typography.P>
-            <p className="capitalize">
+            <Typography.Small>
               {createdAt} by {fullName}
-            </p>
-          </Typography.P>
-        </CardHeader>
+            </Typography.Small>
+          </CardHeader>
 
-        <CardContent>{summary}</CardContent>
-      </Card>
-    </Link>
+          <CardContent>{summary}</CardContent>
+        </Card>
+      </Link>
+    </li>
   )
 }
