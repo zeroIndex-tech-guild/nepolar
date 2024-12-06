@@ -1,4 +1,4 @@
-import { Gauge, Swords } from 'lucide-react'
+import { Gauge, Newspaper, Swords } from 'lucide-react'
 
 export const dashboardSidebarItems = [
   {
@@ -13,6 +13,11 @@ export const dashboardSidebarItems = [
         title: 'Challenges',
         url: '/challenges',
         Icon: Swords,
+      },
+      {
+        title: 'Blogs',
+        url: '/blogs',
+        Icon: Newspaper,
       },
     ],
   },

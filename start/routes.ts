@@ -113,6 +113,7 @@ router.group(() => {
   router
     .group(() => {
       router.get('', [BlogsListController, 'renderBlogsListPage']).as('list_page')
+      router.get('/create', [BlogsListController, 'renderBlogsCreatePage']).as('create')
     })
     .prefix('/:userId/blogs')
     .as('user_blogs')
