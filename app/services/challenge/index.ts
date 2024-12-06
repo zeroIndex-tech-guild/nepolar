@@ -33,6 +33,9 @@ export class ChallengeService {
     }
   }
 
+  /*
+   * Finds the challenges of logged in user
+   */
   async findAll({
     userId,
     page = 1,
@@ -76,6 +79,30 @@ export class ChallengeService {
     } catch (error) {
       return {
         challenge: null,
+        error,
+      }
+    }
+  }
+
+  async findChallengesForLobby({
+    page = 1,
+    limit = 25,
+    orderBy = 'desc',
+  }: {
+    page?: number
+    limit?: number
+    orderBy?: 'desc' | 'asc'
+  }) {
+    try {
+      const data = await Challenge.query().orderBy('created_at', orderBy).paginate(page, limit)
+
+      return {
+        data,
+        error: null,
+      }
+    } catch (error) {
+      return {
+        data: null,
         error,
       }
     }

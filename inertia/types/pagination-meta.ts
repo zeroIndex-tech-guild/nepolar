@@ -8,3 +8,9 @@ export type PaginationMeta = {
   perPage: number
   total: number
 }
+
+export type PaginationProps = {
+  page: number
+  limit: number
+  orderBy: string
+}

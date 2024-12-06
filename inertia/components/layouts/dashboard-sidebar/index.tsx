@@ -20,7 +20,7 @@ export const DashboardSidebar = () => {
     <Sidebar collapsible="icon">
       <SidebarMenuButton asChild>
         <Link
-          href={'#'}
+          href={'/'}
           className={cn('flex items-center gap-2 text-md hover:bg-purple-800  p-2 rounded-md')}
         >
           <Bot size={164} />

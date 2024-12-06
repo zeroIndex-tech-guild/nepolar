@@ -5,6 +5,11 @@ export const dashboardSidebarItems = [
     label: 'ViewPoints',
     points: [
       {
+        title: 'Lobby',
+        url: '/',
+        Icon: Gauge,
+      },
+      {
         title: 'Dashboard',
         url: '/dashboard',
         Icon: Gauge,

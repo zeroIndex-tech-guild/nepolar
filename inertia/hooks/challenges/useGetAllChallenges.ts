@@ -1,8 +1,7 @@
 import { useQuery } from '@tanstack/react-query'
-import { CHALLENGES_QK } from './query-key'
 import { axiosInstance } from '~/components/providers/axios-provider'
 import queryString from 'query-string'
-import { userId } from '~/store/user-store'
+import { LOBBY_CHALLENGES } from './query_key'
 
 type Props = {
   currentPageNo: number
@@ -20,9 +19,9 @@ export const useGetAllChallenges = (props: Props) => {
   })
 
   const { data: challenges, isLoading: isChallengesLoading } = useQuery({
-    queryKey: [CHALLENGES_QK, currentPageNo, limitPerPage],
+    queryKey: [LOBBY_CHALLENGES, currentPageNo, limitPerPage, orderBy],
     queryFn: async () => {
-      const url = `/users/${userId}/challenges?${qs}`
+      const url = `/challenges?${qs}`
       return await axiosInstance.get(url)
     },
   })

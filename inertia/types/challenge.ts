@@ -1,4 +1,5 @@
 import { SuccessResponse } from '#sharedTypes/server-response'
+import { PaginationMeta } from './pagination-meta'
 import { Tag } from './tag'
 
 export type Challenge = {
@@ -19,3 +20,10 @@ export type CreateChallengeResponse = SuccessResponse<{
 export type UpdateChallengeResponse = CreateChallengeResponse
 
 export type DeleteChallengeResponse = SuccessResponse<null>
+
+export type GetAllChallengesResponse = SuccessResponse<{
+  data: {
+    challenges: Challenge[]
+    meta: PaginationMeta
+  }
+}>

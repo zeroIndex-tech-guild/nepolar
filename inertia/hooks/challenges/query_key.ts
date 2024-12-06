@@ -1,0 +1,1 @@
+export const LOBBY_CHALLENGES = 'LOBBY_CHALLENGES'

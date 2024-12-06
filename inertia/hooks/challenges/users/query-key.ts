@@ -1,1 +1,1 @@
-export const CHALLENGES_QK = 'CHALLENGES'
+export const CHALLENGES_QK = 'USERS.CHALLENGES'

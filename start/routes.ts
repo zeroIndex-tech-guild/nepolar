@@ -10,8 +10,9 @@
 import router from '@adonisjs/core/services/router'
 import { middleware } from './kernel.js'
 
-router.on('/').renderInertia('home/index').as('home')
+//router.on('/').renderInertia('home/index').as('home')
 
+const LobbyController = () => import('#controllers/lobby/lobby_controller')
 const DashboardController = () => import('#controllers/dashboard/dashboard_controller')
 
 /**
@@ -48,6 +49,14 @@ const BlogDetailController = () => import('#controllers/blog/blog_detail_control
 |
 | For rendering view
 */
+
+/*
+ * LOBBY ROUTES
+ *
+ */
+router.group(() => {
+  router.get('', [LobbyController, 'index']).as('lobby')
+})
 
 /*
  * AUTH ROUTES
