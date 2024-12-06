@@ -17,6 +17,9 @@ export default class Blog extends BaseModel {
   declare content: string
 
   @column()
+  declare summary: string
+
+  @column()
   declare userId: number
 
   @belongsTo(() => User)

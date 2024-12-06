@@ -4,14 +4,17 @@ import { Button } from '~/components/ui/button'
 import { Typography } from '~/components/ui/typography'
 import { Blog } from '~/types/blog'
 import { PaginationMeta } from '~/types/pagination-meta'
+import { BlogsList } from './components/blogs-list'
 
 type Props = {
-  blogs: Blog[]
-  meta: PaginationMeta
+  blogs: {
+    data: Blog[]
+    meta: PaginationMeta
+  }
 }
 
 export default function BlogsListPage(props: Props) {
-  console.log(props)
+  const { blogs } = props
   return (
     <main>
       <header className="flex flex-col gap-4 mb-8">
@@ -22,6 +25,7 @@ export default function BlogsListPage(props: Props) {
           </Button>
         </div>
       </header>
+      <BlogsList blogs={blogs.data} />
     </main>
   )
 }

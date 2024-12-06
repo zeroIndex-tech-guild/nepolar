@@ -1,4 +1,5 @@
 import { Gauge, Newspaper, Swords } from 'lucide-react'
+import { userId } from '~/store/user-store'
 
 export const dashboardSidebarItems = [
   {
@@ -16,7 +17,7 @@ export const dashboardSidebarItems = [
       },
       {
         title: 'Blogs',
-        url: '/blogs',
+        url: `${userId}/blogs`,
         Icon: Newspaper,
       },
     ],

@@ -5,6 +5,7 @@ export type Blog = {
   id: string
   title: string
   content: string
+  summary: string
   user: User
   userId: string
   createdAt: string

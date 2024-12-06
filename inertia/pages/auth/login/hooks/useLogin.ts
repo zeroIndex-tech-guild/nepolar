@@ -6,13 +6,13 @@ import { User } from '~/types/user'
 import { LoginResponse } from '~/types/auth'
 import { router } from '@inertiajs/react'
 import { TLoginValues } from '../form'
-import { useUserStore } from '~/store/user-store'
+import { userStore } from '~/store/user-store'
 
 const login: MutationFunction<SuccessResponse<{ user: User }>> = async (data) =>
   axiosInstance.post('auth/login', data)
 
 export const useLogin = () => {
-  const { setUser } = useUserStore()
+  const { setUser } = userStore.getState()
 
   const loginMutation = useMutation<LoginResponse, Error, TLoginValues>({
     mutationKey: ['login'],

@@ -4,8 +4,9 @@ type Props = {
   blogs: Blog[]
 }
 
-export const BlogList = (props: Props) => {
-  const { blogs } = props
+export const BlogsList = (props: Props) => {
+  const { blogs = [] } = props
+
   return (
     <ul className="flex flex-col gap-4">
       {blogs.map((blog) => (
@@ -17,7 +18,7 @@ export const BlogList = (props: Props) => {
           <p className="text-sm">
             {blog.createdAt} by {blog.user.fullName}
           </p>
-          <p className="text-gray-400 mt-2">{blog.content}</p>
+          <p className="text-gray-400 mt-2">{blog.summary}</p>
           <a href={`/blog/${blog.id}`} className="text-blue-500 hover:underline mt-2 inline-block">
             Read More
           </a>

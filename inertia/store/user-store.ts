@@ -1,4 +1,4 @@
-import { create } from 'zustand'
+import { createStore } from 'zustand/vanilla'
 import { persist } from 'zustand/middleware'
 import { User } from '~/types/user'
 
@@ -11,7 +11,7 @@ type UserActions = {
 
 type UserStore = UserState & UserActions
 
-export const useUserStore = create<UserStore>()(
+export const userStore = createStore<UserStore>()(
   persist(
     (set, get) => ({
       id: '',
@@ -28,3 +28,5 @@ export const useUserStore = create<UserStore>()(
     }
   )
 )
+
+export const userId = userStore.getState().getUser().id
