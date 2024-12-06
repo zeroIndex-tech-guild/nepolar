@@ -37,6 +37,11 @@ const LogsListController = () => import('#controllers/log/logs_lists_controller'
 const LogsDetailsController = () => import('#controllers/log/logs_details_controller')
 
 /*
+ * BLOGS CONTROLLERS
+ */
+const BlogsListController = () => import('#controllers/blog/blogs_list_controller')
+
+/*
  *
 |--------------------------------------------------------------------------
 | View Routes :)
@@ -100,6 +105,17 @@ router.group(() => {
     .prefix('/challenges')
     .as('challenges')
     .use(middleware.auth())
+
+  /*
+   * BLOGS ROUTES
+   *
+   */
+  router
+    .group(() => {
+      router.get('', [BlogsListController, 'renderBlogsListPage']).as('list_page')
+    })
+    .prefix('/:userId/blogs')
+    .as('user_blogs')
 
   /*
    * DASHBOARD ROUTES

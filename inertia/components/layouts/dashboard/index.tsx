@@ -1,4 +1,4 @@
-import { SidebarProvider, SidebarTrigger, useSidebar } from '~/components/ui/sidebar'
+import { SidebarProvider, SidebarTrigger } from '~/components/ui/sidebar'
 import { DashboardSidebar } from '../dashboard-sidebar'
 import { NepolarCrumb } from '~/components/ui/nepolarcrumb'
 
