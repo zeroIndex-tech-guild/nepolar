@@ -9,7 +9,16 @@ export default class BlogsListController {
   constructor(protected blogsService: BlogService) {}
 
   async renderBlogsListPage({ inertia }: HttpContext) {
-    return inertia.render('blogs/index')
+    const { data } = await this.blogsService.findAll({
+      userId: 1,
+      page: 1,
+      limit: 25,
+      orderBy: 'desc',
+    })
+
+    return inertia.render('blogs/index', {
+      blogs: data,
+    })
   }
 
   async renderBlogsCreatePage({ inertia }: HttpContext) {
@@ -32,7 +41,6 @@ export default class BlogsListController {
       return response.status(errorResponse.statusCode).send(errorResponse)
     }
 
-    console.log({ data }, 'dataa')
     const successResponse = NepolarResponse.success({
       message: 'Blog created successfully',
       data,

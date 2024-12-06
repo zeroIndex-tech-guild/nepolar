@@ -8,7 +8,6 @@ export class BlogService {
         ...payload,
         userId,
       })
-      console.log({ newBlog })
       return {
         data: newBlog,
         error: null,
@@ -35,16 +34,17 @@ export class BlogService {
     try {
       const blogs = await Blog.query()
         .where('user_id', userId)
+        .preload('user')
         .orderBy('created_at', orderBy)
         .paginate(page, limit)
 
       return {
-        blogs,
+        data: blogs,
         error: null,
       }
     } catch (error) {
       return {
-        blogs: null,
+        data: null,
         error,
       }
     }
@@ -54,7 +54,7 @@ export class BlogService {
     try {
       const blog = await Blog.find(blogId)
       return {
-        blog,
+        data: blog,
         error: null,
       }
     } catch (error) {
