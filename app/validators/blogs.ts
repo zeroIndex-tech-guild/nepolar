@@ -4,5 +4,9 @@ export const createBlogValidator = vine.compile(
   vine.object({
     title: vine.string(),
     content: vine.string(),
+
+    params: vine.object({
+      userId: vine.number(),
+    }),
   })
 )

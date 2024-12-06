@@ -1,7 +1,8 @@
+import { NepolarResponse } from '#lib/nepolar-response'
 import { BlogService } from '#services/blog'
 import { createBlogValidator } from '#validators/blogs'
 import { inject } from '@adonisjs/core'
-import { HttpContext } from '@adonisjs/core/http'
+import { HttpContext, ResponseStatus } from '@adonisjs/core/http'
 
 @inject()
 export default class BlogsListController {
@@ -15,11 +16,29 @@ export default class BlogsListController {
     return inertia.render('blogs/create/index')
   }
 
-  async create({ request }: HttpContext) {
-    const payload = await request.validateUsing(createBlogValidator)
+  async create({ request, response }: HttpContext) {
+    const { params, ...payload } = await request.validateUsing(createBlogValidator)
 
-    return {
-      payload,
+    const userId = params.userId
+    const { data, error } = await this.blogsService.create(payload, userId)
+
+    if (error !== null) {
+      const errorResponse = NepolarResponse.error({
+        message: 'Failed to create blog',
+        error,
+        statusCode: ResponseStatus.BadRequest,
+      })
+
+      return response.status(errorResponse.statusCode).send(errorResponse)
     }
+
+    console.log({ data }, 'dataa')
+    const successResponse = NepolarResponse.success({
+      message: 'Blog created successfully',
+      data,
+      statusCode: ResponseStatus.Created,
+    })
+
+    return response.status(successResponse.statusCode).send(successResponse)
   }
 }

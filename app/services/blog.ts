@@ -2,19 +2,20 @@ import Blog from '#models/blog'
 import { CreateBlog } from '#types/blog'
 
 export class BlogService {
-  async create(payload: CreateBlog, userId: number) {
+  async create(payload: Omit<CreateBlog, 'params'>, userId: number) {
     try {
       const newBlog = await Blog.create({
         ...payload,
         userId,
       })
+      console.log({ newBlog })
       return {
-        blog: newBlog,
+        data: newBlog,
         error: null,
       }
     } catch (error) {
       return {
-        blog: null,
+        data: null,
         error,
       }
     }
@@ -44,6 +45,21 @@ export class BlogService {
     } catch (error) {
       return {
         blogs: null,
+        error,
+      }
+    }
+  }
+
+  async fineOne(blogId: number) {
+    try {
+      const blog = await Blog.find(blogId)
+      return {
+        blog,
+        error: null,
+      }
+    } catch (error) {
+      return {
+        blog: null,
         error,
       }
     }

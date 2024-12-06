@@ -181,5 +181,15 @@ router
       .prefix('/challenges')
       .as('challenges-api')
       .use([middleware.auth()])
+
+    /*
+     * BLOGS ROUTES
+     */
+    router
+      .group(() => {
+        router.post('', [BlogsListController, 'create']).as('create')
+      })
+      .prefix('/:userId/blogs')
+      .as('user_blogs-api')
   })
   .prefix('/api')
