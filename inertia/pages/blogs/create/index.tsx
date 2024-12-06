@@ -5,9 +5,9 @@ import { Typography } from '~/components/ui/typography'
 import { Form } from '~/components/ui/form'
 import { FieldsGenerator } from '~/components/form-builder'
 import { Button } from '~/components/ui/button'
-import { useCreateBlog } from '~/hooks/blogs/useCreateBlog'
+import { useCreateBlog } from '~/hooks/blogs/users/useCreateBlog'
 import { Blog } from '~/types/blog'
-import { useUpdateBlog } from '~/hooks/blogs/useUpdateBlog'
+import { useUpdateBlog } from '~/hooks/blogs/users/useUpdateBlog'
 import { toast } from 'sonner'
 import { router } from '@inertiajs/react'
 
@@ -33,7 +33,7 @@ export default function BlogsCreatePage(props: Props) {
       await updateBlog(data, {
         onSuccess: (data) => {
           toast.success(data.message)
-          router.replace(`/blogs/${data.data.id}`)
+          router.replace(`/dashboard/blogs/${data.data.id}`)
         },
         onError: (error) => {
           toast.error(error.message)
@@ -46,7 +46,7 @@ export default function BlogsCreatePage(props: Props) {
       onSuccess: (data) => {
         console.log(data)
         toast.success(data.message)
-        router.replace(`/blogs/${data.data.id}`)
+        router.replace(`/dashboard/blogs/${data.data.id}`)
       },
       onError: (error) => {
         toast.error(error.message)

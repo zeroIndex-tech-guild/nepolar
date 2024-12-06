@@ -11,12 +11,12 @@ export const dashboardSidebarItems = [
       },
       {
         title: 'Challenges',
-        url: '/challenges',
+        url: '/dashboard/challenges',
         Icon: Swords,
       },
       {
         title: 'Blogs',
-        url: '/blogs',
+        url: '/dashboard/blogs',
         Icon: Newspaper,
       },
     ],

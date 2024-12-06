@@ -24,7 +24,7 @@ export default function BlogDetailPage(props: Props) {
           <div className="flex items-center gap-2 opacity-0 group-hover:opacity-100">
             <DeleteBlogAlert blogId={blog.id} />
 
-            <Link href={`/blogs/${blog.id}/edit`}>
+            <Link href={`/dashboard/blogs/${blog.id}/edit`}>
               <Edit2 className="hover:text-blue-500" />
             </Link>
           </div>

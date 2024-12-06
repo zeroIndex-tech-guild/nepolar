@@ -13,7 +13,7 @@ import {
   AlertDialogTrigger,
 } from '~/components/ui/alert-dialog'
 import { LoadingButton } from '~/components/ui/button'
-import { useDeleteLog } from '~/hooks/logs/useDeleteLog'
+import { useDeleteLog } from '~/hooks/logs/users/useDeleteLog'
 
 export const DeleteLogAlert = ({ challengeId, logId }: { challengeId: string; logId: string }) => {
   const { deleteLog, isDeletingLog } = useDeleteLog()
@@ -27,7 +27,7 @@ export const DeleteLogAlert = ({ challengeId, logId }: { challengeId: string; lo
         },
         onSuccess: () => {
           toast.success('Log deleted successfully.')
-          router.visit('/challenges')
+          router.visit('/dashboard/challenges')
         },
       }
     )

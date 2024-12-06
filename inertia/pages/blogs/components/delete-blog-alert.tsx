@@ -13,7 +13,7 @@ import {
   AlertDialogTrigger,
 } from '~/components/ui/alert-dialog'
 import { LoadingButton } from '~/components/ui/button'
-import { useDeleteBlog } from '~/hooks/blogs/useDeleteBlog'
+import { useDeleteBlog } from '~/hooks/blogs/users/useDeleteBlog'
 
 export const DeleteBlogAlert = ({ blogId }: { blogId: string }) => {
   const { deleteBlog, isDeletingBlog } = useDeleteBlog()
@@ -25,7 +25,7 @@ export const DeleteBlogAlert = ({ blogId }: { blogId: string }) => {
       },
       onSuccess: () => {
         toast.success('Blog deleted successfully.')
-        router.replace('/blogs')
+        router.replace('/dashboard/blogs')
       },
     })
   }

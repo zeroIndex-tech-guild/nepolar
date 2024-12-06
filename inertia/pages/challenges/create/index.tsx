@@ -5,9 +5,9 @@ import { challengeFormFields, ChallengeFormValues, defaultValues, resolver } fro
 import { SubmitHandler, useForm } from 'react-hook-form'
 import { LoadingButton } from '~/components/ui/button'
 import { router } from '@inertiajs/react'
-import { useCreateChallenge } from '~/hooks/challenges/useCreateChallenge'
+import { useCreateChallenge } from '~/hooks/challenges/users/useCreateChallenge'
 import { Challenge } from '~/types/challenge'
-import { userUpdateChallenge } from '~/hooks/challenges/useUpdateChallenge'
+import { userUpdateChallenge } from '~/hooks/challenges/users/useUpdateChallenge'
 import { toast } from 'sonner'
 import { DeleteChallengeAlert } from '../components/delete-challenge-alert'
 
@@ -41,8 +41,9 @@ export default function SingleChallengePage(props: PageProps) {
         onError: () => {
           toast.error('Something went wrong. Please try again.')
         },
-        onSuccess: () => {
+        onSuccess: (data) => {
           toast.success('Challenge updated successfully.')
+          router.visit(`/dashboard/challenges/${data.data.challenge.id}`)
         },
       })
 
@@ -55,7 +56,7 @@ export default function SingleChallengePage(props: PageProps) {
       },
       onSuccess: (data) => {
         toast.success('Challenge created successfully.')
-        router.visit(`/challenges/${data.data.challenge.id}`)
+        router.visit(`/dashboard/challenges/${data.data.challenge.id}`)
       },
     })
   }

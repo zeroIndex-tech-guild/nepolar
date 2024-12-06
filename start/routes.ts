@@ -33,7 +33,6 @@ const ChallengeDetailController = () =>
  */
 
 const LogsListController = () => import('#controllers/log/logs_lists_controller')
-
 const LogsDetailsController = () => import('#controllers/log/logs_details_controller')
 
 /*
@@ -50,81 +49,95 @@ const BlogDetailController = () => import('#controllers/blog/blog_detail_control
 | For rendering view
 */
 
-router.group(() => {
-  /*
-   * AUTH ROUTES
-   */
-  router
-    .group(() => {
-      router.get('/signup', [RegisterController, 'renderSignupPage']).as('signup_page')
-      router.get('/login', [LoginController, 'renderLoginPage']).as('login_page')
-    })
-    .as('auth')
+/*
+ * AUTH ROUTES
+ */
+router
+  .group(() => {
+    router.get('/signup', [RegisterController, 'renderSignupPage']).as('signup')
+    router.get('/login', [LoginController, 'renderLoginPage']).as('login')
+  })
+  .as('auth-page')
 
-  /*
-   * CHALLENGES ROUTES
-   */
-  router
-    .group(() => {
-      // shows the list of challenges
-      router.get('', [ChallengeListController, 'renderChallengesPage']).as('list_page')
+/*
+ * DASHBOARD ROUTES
+ */
 
-      // creates a new challenge
-      router.get('/create', [ChallengeListController, 'renderCreatePage']).as('create_page')
+router
+  .group(() => {
+    // Dashboard route
+    router.get('', [DashboardController, 'show']).as('dashboard.show')
 
-      // shows the challenge detail
-      router.get('/:challengeId', [ChallengeDetailController, 'renderDetailPage']).as('detail_page')
+    /*
+     * CHALLENGE ROUTES
+     */
+    router
+      .group(() => {
+        // Challenge list
+        router.get('', [ChallengeListController, 'renderChallengesPage']).as('challenges.list')
 
-      // create /  edit the challenge
-      // when creating /:challengeId => /create
-      // whenEditing /:challengeId/edit
-      router
-        .get('/:challengeId/edit', [ChallengeDetailController, 'renderEditPage'])
-        .as('edit_page')
+        // Create new challenge
+        router.get('/create', [ChallengeListController, 'renderCreatePage']).as('challenges.create')
 
-      /*
-       * LOGS ROUTES
-       */
-      router
-        .group(() => {
-          // shows the list of logs
-          router.get('', [LogsListController, 'renderLogsPage']).as('list_page')
+        // Challenge detail
+        router
+          .get('/:challengeId', [ChallengeDetailController, 'renderDetailPage'])
+          .as('challenges.detail')
 
-          // creates a new log
-          router.get('/create', [LogsListController, 'renderCreateLogPage']).as('create_page')
+        // Edit challenge
+        router
+          .get('/:challengeId/edit', [ChallengeDetailController, 'renderEditPage'])
+          .as('challenges.edit')
 
-          // shows the log detail
-          router.get('/:logId', [LogsDetailsController, 'renderEditLogPage']).as('detail_page')
+        /*
+         * LOGS ROUTES (Subgroup within challenges)
+         */
+        router
+          .group(() => {
+            // Log list
+            router.get('', [LogsListController, 'renderLogsPage']).as('challenges.logs.list')
 
-          // edit the log
-          router.get('/:logId/edit', [LogsDetailsController, 'renderEditLogPage']).as('create_edit')
-        })
-        .prefix('/:challengeId/logs')
-        .as('logs-page')
-    })
-    .prefix('/challenges')
-    .as('challenges')
-    .use(middleware.auth())
+            // Create new log
+            router
+              .get('/create', [LogsListController, 'renderCreateLogPage'])
+              .as('challenges.logs.create')
 
-  /*
-   * BLOGS ROUTES
-   *
-   */
-  router
-    .group(() => {
-      router.get('', [BlogsListController, 'renderBlogsListPage']).as('list_page')
-      router.get('/create', [BlogsListController, 'renderBlogsCreatePage']).as('create')
-      router.get('/:blogId', [BlogDetailController, 'renderBlogDetailPage']).as('detail_page')
-      router.get('/:blogId/edit', [BlogDetailController, 'renderBlogEditPage']).as('edit_page')
-    })
-    .prefix('/blogs')
-    .as('user_blogs')
+            // Log detail
+            router
+              .get('/:logId', [LogsDetailsController, 'renderEditLogPage'])
+              .as('challenges.logs.detail')
 
-  /*
-   * DASHBOARD ROUTES
-   */
-  router.get('/dashboard', [DashboardController, 'show']).as('dashboard_page')
-})
+            // Edit log
+            router
+              .get('/:logId/edit', [LogsDetailsController, 'renderEditLogPage'])
+              .as('challenges.logs.edit')
+          })
+          .prefix('/:challengeId/logs')
+      })
+      .prefix('/challenges')
+
+    /*
+     * BLOGS ROUTES
+     */
+    router
+      .group(() => {
+        // Blog list
+        router.get('', [BlogsListController, 'renderBlogsListPage']).as('blogs.list')
+
+        // Create new blog
+        router.get('/create', [BlogsListController, 'renderBlogsCreatePage']).as('blogs.create')
+
+        // Blog detail
+        router.get('/:blogId', [BlogDetailController, 'renderBlogDetailPage']).as('blogs.detail')
+
+        // Edit blog
+        router.get('/:blogId/edit', [BlogDetailController, 'renderBlogEditPage']).as('blogs.edit')
+      })
+      .prefix('/blogs')
+  })
+  .prefix('/dashboard')
+  .as('dashboard')
+  .use(middleware.auth())
 
 /*
 |--------------------------------------------------------------------------
@@ -141,60 +154,71 @@ router
      */
     router
       .group(() => {
-        router.post('/signup', [RegisterController, 'register']).as('signup')
-        router.post('/login', [LoginController, 'login']).as('login')
+        router.post('/signup', [RegisterController, 'register']).as('auth.signup')
+        router.post('/login', [LoginController, 'login']).as('auth.login')
       })
       .as('auth')
       .prefix('/auth')
 
     /*
-     * CHALLENGES ROUTES
+     * USERS API
+     * FOR USERS THEMSELVES
      */
     router
       .group(() => {
-        router.post('', [ChallengeListController, 'create']).as('create')
-
-        router.get('', [ChallengeListController, 'findAll']).as('findAll')
-
-        router.get('/:challengeId', [ChallengeDetailController, 'read']).as('read')
-
-        router.put('/:challengeId', [ChallengeDetailController, 'update']).as('update')
-
-        router.delete('/:challengeId', [ChallengeDetailController, 'delete']).as('delete')
-
         /*
-         * LOGS ROUTES
+         * CHALLENGE ROUTES
          */
         router
           .group(() => {
-            router.post('', [LogsListController, 'create']).as('create')
+            // Challenge routes
+            router.post('', [ChallengeListController, 'create']).as('challenges.create')
+            router.get('', [ChallengeListController, 'findAll']).as('challenges.findAll')
+            router.get('/:challengeId', [ChallengeDetailController, 'read']).as('challenges.read')
+            router
+              .put('/:challengeId', [ChallengeDetailController, 'update'])
+              .as('challenges.update')
+            router
+              .delete('/:challengeId', [ChallengeDetailController, 'delete'])
+              .as('challenges.delete')
 
-            router.get('', [LogsListController, 'findMany']).as('findMany')
-
-            router.get('/:logId', [LogsDetailsController, 'find']).as('find')
-
-            router.put('/:logId', [LogsDetailsController, 'update']).as('update')
-
-            router.delete('/:logId', [LogsDetailsController, 'delete']).as('delete')
+            /*
+             * LOGS ROUTES (Nested under challenge)
+             */
+            router
+              .group(() => {
+                router.post('', [LogsListController, 'create']).as('challenges.logs.create')
+                router.get('', [LogsListController, 'findMany']).as('challenges.logs.findMany')
+                router.get('/:logId', [LogsDetailsController, 'find']).as('challenges.logs.find')
+                router
+                  .put('/:logId', [LogsDetailsController, 'update'])
+                  .as('challenges.logs.update')
+                router
+                  .delete('/:logId', [LogsDetailsController, 'delete'])
+                  .as('challenges.logs.delete')
+              })
+              .prefix('/:challengeId/logs')
+              .as('challenges.logs')
           })
-          .prefix('/:challengeId/logs')
-          .as('logs-api')
-      })
-      .prefix('/challenges')
-      .as('challenges-api')
-      .use([middleware.auth()])
+          .prefix('/challenges')
+          .as('challenges')
+          .use([middleware.auth()])
 
-    /*
-     * BLOGS ROUTES
-     */
-    router
-      .group(() => {
-        router.post('', [BlogsListController, 'create']).as('create')
-        router.put('/:blogId', [BlogDetailController, 'update']).as('update')
-        router.delete('/:blogId', [BlogDetailController, 'delete']).as('delete')
+        /*
+         * BLOG ROUTES
+         */
+        router
+          .group(() => {
+            router.post('', [BlogsListController, 'create']).as('blogs.create')
+            router.put('/:blogId', [BlogDetailController, 'update']).as('blogs.update')
+            router.delete('/:blogId', [BlogDetailController, 'delete']).as('blogs.delete')
+          })
+          .prefix('/blogs')
+          .as('blogs')
       })
-      .prefix('/blogs')
-      .as('user_blogs-api')
+      .prefix('/users/:userId')
+      .as('users')
       .use([middleware.auth()])
   })
-  .prefix('/api')
+  .prefix('/api/v1')
+  .as('api-v1')

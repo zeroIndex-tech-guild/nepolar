@@ -13,7 +13,7 @@ import {
   AlertDialogTrigger,
 } from '~/components/ui/alert-dialog'
 import { LoadingButton } from '~/components/ui/button'
-import { useDeleteChallenge } from '~/hooks/challenges/useDeleteChallange'
+import { useDeleteChallenge } from '~/hooks/challenges/users/useDeleteChallange'
 
 export const DeleteChallengeAlert = ({ challengeId }: { challengeId: string }) => {
   const { deleteChallenge, deleteChallengeIsLoading } = useDeleteChallenge()
@@ -25,7 +25,7 @@ export const DeleteChallengeAlert = ({ challengeId }: { challengeId: string }) =
       },
       onSuccess: () => {
         toast.success('Challenge deleted successfully.')
-        router.visit('/challenges')
+        router.visit('/dashboard/challenges')
       },
     })
   }

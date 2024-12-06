@@ -5,11 +5,11 @@ import { Form } from '~/components/ui/form'
 import { Typography } from '~/components/ui/typography'
 import { defaultValues, resolver, logFormFields, LogFormValues } from './forms'
 import { Button, LoadingButton } from '~/components/ui/button'
-import { useCreateLog } from '~/hooks/logs/useCreateLog'
+import { useCreateLog } from '~/hooks/logs/users/useCreateLog'
 import { toast } from 'sonner'
 import { router } from '@inertiajs/react'
 import { Log } from '~/types/log'
-import { useUpdateLog } from '~/hooks/logs/useUpdateLog'
+import { useUpdateLog } from '~/hooks/logs/users/useUpdateLog'
 import { DeleteLogAlert } from '../components/delete-log-alert'
 
 type Props = {
@@ -45,7 +45,7 @@ export default function LogCreationUpdatePage(props: Props) {
         {
           onSuccess: () => {
             toast.success('Log updated successfully')
-            router.get(`/challenges/${challengeId}/logs`)
+            router.get(`/dashboard/challenges/${challengeId}/logs`)
           },
           onError: () => {
             toast.error('Failed to update log')
@@ -63,7 +63,7 @@ export default function LogCreationUpdatePage(props: Props) {
       {
         onSuccess: () => {
           toast.success('Log created successfully')
-          router.get(`/challenges/${challengeId}/logs`)
+          router.get(`/dashboard/challenges/${challengeId}/logs`)
         },
         onError: () => {
           toast.error('Failed to create log')

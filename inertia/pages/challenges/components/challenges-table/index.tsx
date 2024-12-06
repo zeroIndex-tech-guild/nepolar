@@ -44,7 +44,7 @@ export const ChallengesTable = (props: Props) => {
   const { data = [] } = props
 
   const onRowClick = (row: Row<Challenge>) => {
-    const route = `/challenges/${row.original.id}`
+    const route = `/dashboard/challenges/${row.original.id}`
     router.get(route)
   }
 

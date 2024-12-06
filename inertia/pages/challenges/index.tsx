@@ -23,7 +23,7 @@ export default function ChallengePage(props: Props) {
 
       <div>
         <Button variant="outline" className="">
-          <Link href="/challenges/create">Create Challenge</Link>
+          <Link href="/dashboard/challenges/create">Create Challenge</Link>
         </Button>
       </div>
 

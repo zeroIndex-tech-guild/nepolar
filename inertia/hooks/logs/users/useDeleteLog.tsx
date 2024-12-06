@@ -3,6 +3,7 @@ import { axiosInstance } from '~/components/providers/axios-provider'
 import { LOGS_QK } from './query-key'
 import { DeleteLogResponse } from '~/types/log'
 import { ErrorResponse } from '#sharedTypes/server-response'
+import { userId } from '~/store/user-store'
 
 type Props = {
   challengeId: string
@@ -13,7 +14,7 @@ export const useDeleteLog = () => {
   const mutate = useMutation<DeleteLogResponse, ErrorResponse, Props>({
     mutationKey: [LOGS_QK],
     mutationFn: async ({ challengeId, logId }) =>
-      await axiosInstance.delete(`/challenges/${challengeId}/logs/${logId}`),
+      await axiosInstance.delete(`/users/${userId}/challenges/${challengeId}/logs/${logId}`),
   })
 
   return {

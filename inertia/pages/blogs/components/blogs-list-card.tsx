@@ -18,7 +18,7 @@ export const BlogListCard = (props: Props) => {
     },
   } = props
 
-  const url = `/blogs/${id}`
+  const url = `/dashboard/blogs/${id}`
 
   return (
     <li>

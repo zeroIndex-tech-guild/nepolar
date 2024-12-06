@@ -4,7 +4,7 @@ import axios, { AxiosInstance } from 'axios'
 const AxiosContext = createContext<AxiosInstance | null>(null)
 
 export const axiosInstance = axios.create({
-  baseURL: '/api/',
+  baseURL: '/api/v1',
 })
 
 export const AxiosProvider = ({ children }: { children: React.ReactNode }) => {
