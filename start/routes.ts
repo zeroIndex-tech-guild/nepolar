@@ -26,8 +26,7 @@ const LoginController = () => import('#controllers/auth/login_controller')
  */
 const ChallengeListController = () => import('#controllers/challenge/challenges_list_controller')
 
-const ChallengeDetailController = () =>
-  import('#controllers/challenge/challenges_detail_controller')
+const ChallengeDetailController = () => import('#controllers/challenge/challenge_detail_controller')
 
 /**
  * LOG CONTROLLERS
@@ -41,6 +40,7 @@ const LogsDetailsController = () => import('#controllers/log/logs_details_contro
  */
 const BlogsListController = () => import('#controllers/blog/blogs_list_controller')
 const BlogDetailController = () => import('#controllers/blog/blog_detail_controller')
+
 /*
  *
 |--------------------------------------------------------------------------
@@ -54,9 +54,12 @@ const BlogDetailController = () => import('#controllers/blog/blog_detail_control
  * LOBBY ROUTES
  *
  */
-router.group(() => {
-  router.get('', [LobbyController, 'index']).as('lobby')
-})
+router
+  .group(() => {
+    router.get('', [LobbyController, 'index']).as('view')
+    router.get('/challenges', [LobbyController, 'renderChallengesPage']).as('lobby.challenges')
+  })
+  .as('lobby')
 
 /*
  * AUTH ROUTES
@@ -181,8 +184,10 @@ router
         router
           .group(() => {
             // Challenge routes
-            router.post('', [ChallengeListController, 'create']).as('challenges.create')
-            router.get('', [ChallengeListController, 'findAll']).as('challenges.findAll')
+            router.post('', [ChallengeListController, 'createNewChallenge']).as('challenges.create')
+            router
+              .get('', [ChallengeListController, 'findChallengesForCurrentUser'])
+              .as('challenges.findAllForCurrentUser')
             router.get('/:challengeId', [ChallengeDetailController, 'read']).as('challenges.read')
             router
               .put('/:challengeId', [ChallengeDetailController, 'update'])

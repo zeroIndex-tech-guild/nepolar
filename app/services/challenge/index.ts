@@ -33,10 +33,7 @@ export class ChallengeService {
     }
   }
 
-  /*
-   * Finds the challenges of logged in user
-   */
-  async findAll({
+  async findChallengesForCurrentUser({
     userId,
     page = 1,
     limit = 25,
@@ -53,6 +50,7 @@ export class ChallengeService {
         .orderBy('created_at', orderBy)
         .paginate(page, limit)
 
+      console.log({ challenges }, '****')
       return {
         challenges,
         error: null,
@@ -85,6 +83,45 @@ export class ChallengeService {
   }
 
   async findChallengesForLobby({
+    page = 1,
+    limit = 25,
+    orderBy = 'desc',
+  }: {
+    page?: number
+    limit?: number
+    orderBy?: 'desc' | 'asc'
+  }) {
+    try {
+      const data = await Challenge.query().orderBy('created_at', orderBy).paginate(page, limit)
+
+      return {
+        data,
+        error: null,
+      }
+    } catch (error) {
+      return {
+        data: null,
+        error,
+      }
+    }
+  }
+
+  async findChallengesForUser(userId: number) {
+    try {
+      const data = await Challenge.query().where('user_id', userId)
+      return {
+        data,
+        error: null,
+      }
+    } catch (error) {
+      return {
+        data: null,
+        error,
+      }
+    }
+  }
+
+  async findChallenges({
     page = 1,
     limit = 25,
     orderBy = 'desc',

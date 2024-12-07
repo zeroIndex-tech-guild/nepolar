@@ -1,5 +1,6 @@
 import Log from '#models/log'
 import { ChallengeService } from '#services/challenge/index'
+import { PaginationParams } from '#validators/params'
 import { inject } from '@adonisjs/core'
 
 @inject()
@@ -30,7 +31,11 @@ export default class LobbyService {
     }
   }
 
-  async getChallenges() {
-    //const {} = await this.challengeService
+  async getChallenges({ page = 1, limit = 25, orderBy = 'desc' }: PaginationParams) {
+    return await this.challengeService.findChallenges({
+      page,
+      limit,
+      orderBy,
+    })
   }
 }

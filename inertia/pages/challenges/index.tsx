@@ -4,8 +4,10 @@ import { PaginationMeta } from '~/types/pagination-meta'
 import { ChallengesTable } from './components/challenges-table'
 import { Button } from '~/components/ui/button'
 import { Link } from '@inertiajs/react'
+import { User } from '~/types/user'
 
 type Props = {
+  user: User
   challenges: {
     data: Challenge[]
     meta: PaginationMeta

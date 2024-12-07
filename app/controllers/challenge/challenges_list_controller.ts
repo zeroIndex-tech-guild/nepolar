@@ -1,6 +1,6 @@
 import { ChallengeService } from '#services/challenge/index'
 import { createChallengeValidator } from '#validators/challenge/create'
-import { getAllChallengeValidator } from '#validators/challenge/getAll'
+import { findChallengesForCurrentUser } from '#validators/challenge/getAll'
 import { inject } from '@adonisjs/core'
 import type { HttpContext } from '@adonisjs/core/http'
 import { StatusCodes } from 'http-status-codes'
@@ -15,7 +15,7 @@ export default class ChallengesController {
 
     const { page = 1, limit = 25, orderBy = 'desc' } = request.qs()
 
-    const { challenges = [] } = await this.challengeService.findAll({
+    const { challenges } = await this.challengeService.findChallengesForCurrentUser({
       userId: user?.id,
       page,
       limit,
@@ -35,7 +35,7 @@ export default class ChallengesController {
     })
   }
 
-  async create({ request, response, auth }: HttpContext) {
+  async createNewChallenge({ request, response, auth }: HttpContext) {
     const payload = await request.validateUsing(createChallengeValidator)
 
     const { days, name, tags, description } = payload
@@ -86,11 +86,11 @@ export default class ChallengesController {
     return response.status(StatusCodes.CREATED).json(successResponse)
   }
 
-  async findAll({ auth, request, response }: HttpContext) {
+  async findChallengesForCurrentUser({ auth, request, response }: HttpContext) {
     const user = auth.user!
-    const { page, limit, orderBy } = await request.validateUsing(getAllChallengeValidator)
+    const { page, limit, orderBy } = await request.validateUsing(findChallengesForCurrentUser)
 
-    const { challenges, error } = await this.challengeService.findAll({
+    const { challenges, error } = await this.challengeService.findChallengesForCurrentUser({
       userId: user?.id,
       page,
       limit,
