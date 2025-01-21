@@ -58,7 +58,6 @@ export default class ChallengesController {
     const challengeId = request.param('challengeId')
 
     try {
-      //const challenge = await Challenge.findOrFail(challengeId)
       const challenge = await Challenge.query()
         .where('id', challengeId)
         .preload('tags')

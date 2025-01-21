@@ -17,14 +17,14 @@ export const LobbySidebar = () => {
   const { url: pageUrl } = usePage()
 
   return (
-    <Sidebar collapsible="icon">
+    <Sidebar collapsible="icon" variant="sidebar">
       <SidebarMenuButton asChild>
         <Link
           href={'/'}
-          className={cn('flex items-center gap-2 text-md hover:bg-purple-800  p-2 rounded-md')}
+          className={cn('flex items-center gap-2 text-md hover:bg-purple-800  p-4 rounded-md')}
         >
-          <Bot size={164} />
-          <span>Neploar</span>
+          <Bot size={64} className="text-purple-500 h-8 w-8" />
+          <span className="text-2xl">Neploar</span>
         </Link>
       </SidebarMenuButton>
 

@@ -3,7 +3,6 @@ import { LobbyLayout } from '~/components/layouts/lobby'
 type Props = {}
 
 export default function LobbyChallengesPage(props: Props) {
-  console.log(props)
   return <div>LobbyChallengesPage</div>
 }
 
