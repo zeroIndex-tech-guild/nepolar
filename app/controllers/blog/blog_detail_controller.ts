@@ -1,4 +1,4 @@
-import { NepolarResponse } from '#lib/nepolar-response'
+import { NepolarResponse } from '#lib/nepolar_response'
 import { BlogService } from '#services/blog'
 import { updateBlogValidator } from '#validators/blogs'
 import { inject } from '@adonisjs/core'

@@ -1,10 +1,10 @@
 import { ChallengeService } from '#services/challenge/index'
 import { createChallengeValidator } from '#validators/challenge/create'
-import { findChallengesForCurrentUser } from '#validators/challenge/getAll'
+import { findChallengesForCurrentUser } from '#validators/challenge/get_all'
 import { inject } from '@adonisjs/core'
 import type { HttpContext } from '@adonisjs/core/http'
 import { StatusCodes } from 'http-status-codes'
-import { NepolarResponse } from '#lib/nepolar-response'
+import { NepolarResponse } from '#lib/nepolar_response'
 
 @inject()
 export default class ChallengesController {
@@ -53,7 +53,7 @@ export default class ChallengesController {
     )
 
     if (error !== null) {
-      let error_response = NepolarResponse.error({
+      let errorResponse = NepolarResponse.error({
         statusCode: StatusCodes.UNPROCESSABLE_ENTITY,
         message: "Couldn't create a new challenge at the moment.",
         error: [
@@ -66,14 +66,14 @@ export default class ChallengesController {
       })
 
       if (error.code === 'E_VALIDATION_ERROR') {
-        error_response = NepolarResponse.error({
+        errorResponse = NepolarResponse.error({
           statusCode: StatusCodes.UNPROCESSABLE_ENTITY,
           message: "Couldn't create a new challenge at the moment.",
           error: error.messages,
         })
       }
 
-      return response.status(500).json(error_response)
+      return response.status(500).json(errorResponse)
     }
 
     const successResponse = NepolarResponse.success({

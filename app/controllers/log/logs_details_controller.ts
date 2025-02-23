@@ -7,7 +7,7 @@ import {
   updateLogValidator,
 } from '#validators/log/index'
 import { inject } from '@adonisjs/core'
-import { NepolarResponse } from '#lib/nepolar-response'
+import { NepolarResponse } from '#lib/nepolar_response'
 
 @inject()
 export default class LogsDetailsController {

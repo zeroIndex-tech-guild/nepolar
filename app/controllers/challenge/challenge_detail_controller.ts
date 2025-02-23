@@ -1,6 +1,6 @@
 import Challenge from '#models/challenge'
 import type { HttpContext } from '@adonisjs/core/http'
-import { NepolarResponse } from '../../lib/nepolar-response.js'
+import { NepolarResponse } from '../../lib/nepolar_response.js'
 import { updateChallengeValidator } from '#validators/challenge/update'
 import { inject } from '@adonisjs/core'
 import { ChallengeService } from '#services/challenge/index'

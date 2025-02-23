@@ -1,7 +1,7 @@
 import Blog from '#models/blog'
 import { CreateBlog } from '#types/blog'
 import { inject } from '@adonisjs/core'
-import { SummaryGeneration } from './summary-generation.js'
+import { SummaryGeneration } from './summary_generation.js'
 import { UpdateBlogValues } from '#validators/blogs'
 
 @inject()

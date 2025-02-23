@@ -1,5 +1,5 @@
-import { E_VALIDATION_ERROR } from '#errorCode'
-import { NepolarResponse } from '#lib/nepolar-response'
+import { E_VALIDATION_ERROR } from '../../constants/error_code.js'
+import { NepolarResponse } from '#lib/nepolar_response'
 import User from '#models/user'
 import { registrationValidator } from '#validators/auth/register'
 import type { HttpContext } from '@adonisjs/core/http'

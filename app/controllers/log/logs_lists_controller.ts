@@ -1,4 +1,4 @@
-import { NepolarResponse } from '#lib/nepolar-response'
+import { NepolarResponse } from '#lib/nepolar_response'
 import { LogService } from '#services/log/index'
 import {
   createLogValidator,

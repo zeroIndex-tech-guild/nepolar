@@ -1,7 +1,7 @@
 import User from '#models/user'
 import { loginValidator } from '#validators/auth/login'
 import { type HttpContext } from '@adonisjs/core/http'
-import { NepolarResponse } from '#lib/nepolar-response'
+import { NepolarResponse } from '#lib/nepolar_response'
 import { StatusCodes } from 'http-status-codes'
 
 export default class LoginController {
