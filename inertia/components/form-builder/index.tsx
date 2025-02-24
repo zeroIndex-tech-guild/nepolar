@@ -2,10 +2,7 @@ import { ControllerProps, ControllerRenderProps, UseFormReturn } from 'react-hoo
 import { FormControl, FormField, FormItem, FormLabel, FormMessage } from '~/components/ui/form'
 import { Input } from '~/components/ui/input'
 import { MDXEditor } from '../ui/mdx-editor'
-import { DevTool } from '@hookform/devtools'
 import { TagsInput } from '../ui/tags-input'
-
-import env from '#start/env'
 
 type TInputElField = {
   name: string
@@ -138,7 +135,6 @@ export const FieldsGenerator = (props: { fields: Field[]; form: UseFormReturn<an
     <>
       {fields.map((field) => (
         <>
-          {env.get('NODE_ENV') === 'development' && <DevTool control={form.control} />},
           <FieldGenerator key={field.name} field={field} form={form} />
         </>
       ))}
