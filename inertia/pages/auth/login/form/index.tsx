@@ -8,6 +8,13 @@ export const loginFields: Field[] = [
     type: 'text',
     label: 'Email',
     placeholder: 'nepali@nepolar.com',
+    colSpan: 6,
+  },
+  {
+    name: 'password',
+    type: 'password',
+    label: 'Password',
+    placeholder: '********',
   },
   {
     name: 'password',
