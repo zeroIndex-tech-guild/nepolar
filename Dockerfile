@@ -1,5 +1,3 @@
-
-
 FROM node:20.12.2-alpine3.18 AS base
 
 # All deps stage
