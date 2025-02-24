@@ -16,7 +16,7 @@ export default function render(page: any) {
     setup: ({ App, props }) => (
       <AxiosProvider>
         <QueryProvider>
-          <ThemeProvider defaultTheme="dark" storageKey="nepolarTheme">
+          <ThemeProvider defaultTheme="dark" storageKey="gnepolarTheme">
             <Toaster richColors />
             <App {...props} />
           </ThemeProvider>

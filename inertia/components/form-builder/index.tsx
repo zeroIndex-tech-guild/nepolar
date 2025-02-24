@@ -5,6 +5,8 @@ import { MDXEditor } from '../ui/mdx-editor'
 import { DevTool } from '@hookform/devtools'
 import { TagsInput } from '../ui/tags-input'
 
+import env from '#start/env'
+
 type TInputElField = {
   name: string
   label: string
@@ -134,9 +136,11 @@ export const FieldsGenerator = (props: { fields: Field[]; form: UseFormReturn<an
 
   return (
     <>
-      <DevTool control={form.control} />
       {fields.map((field) => (
-        <FieldGenerator key={field.name} field={field} form={form} />
+        <>
+          {env.get('NODE_ENV') === 'development' && <DevTool control={form.control} />},
+          <FieldGenerator key={field.name} field={field} form={form} />
+        </>
       ))}
     </>
   )
