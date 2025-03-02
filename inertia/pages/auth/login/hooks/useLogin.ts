@@ -21,7 +21,7 @@ export const useLogin = () => {
       const user = data.data.user
       toast.success(data.message)
       setUser(user)
-      router.replace('/dashboard')
+      router.get('/')
     },
     onError: (error) => {
       toast.error(error.message)

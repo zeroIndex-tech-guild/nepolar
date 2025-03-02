@@ -9,6 +9,7 @@
 
 import router from '@adonisjs/core/services/router'
 import { middleware } from './kernel.js'
+import ZeroCloudinaryController from '#controllers/zero_cloudinary/index'
 
 //router.on('/').renderInertia('home/index').as('home')
 
@@ -41,6 +42,10 @@ const LogsDetailsController = () => import('#controllers/log/logs_details_contro
 const BlogsListController = () => import('#controllers/blog/blogs_list_controller')
 const BlogDetailController = () => import('#controllers/blog/blog_detail_controller')
 
+/*
+ * Cloudinary CONTROLLERS
+ */
+const ZeroCloudinary = () => import('#controllers/zero_cloudinary/index')
 /*
  *
 |--------------------------------------------------------------------------
@@ -232,6 +237,19 @@ router
       })
       .prefix('/users/:userId')
       .as('users')
+      .use([middleware.auth()])
+
+    /*
+     * Cloudinary API
+     */
+    router
+      .group(() => {
+        router
+          .post('/mdx-image', [ZeroCloudinaryController, 'mdxImageUpload'])
+          .as('mdx-image-upload')
+      })
+      .as('uploads')
+      .prefix('/uploads')
       .use([middleware.auth()])
   })
   .prefix('/api/v1')

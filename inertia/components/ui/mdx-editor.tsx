@@ -3,8 +3,10 @@ import {
   BoldItalicUnderlineToggles,
   ChangeCodeMirrorLanguage,
   ConditionalContents,
+  ImageUploadHandler,
   InsertCodeBlock,
   InsertFrontmatter,
+  InsertImage,
   InsertSandpack,
   markdownShortcutPlugin,
   MDXEditorMethods,
@@ -27,103 +29,61 @@ import {
 
 import '@mdxeditor/editor/style.css'
 import { cn } from '~/lib/utils'
+import { useUploadMdxImage } from '~/hooks/uploads/useUploadMdxImage'
 
-//type Props = {
-//  /** The current markdown content of the editor */
-//  markdown: string
-//
-//  /**
-//   * Callback for handling image upload.
-//   * It takes an image file as input and returns the URL of the uploaded image.
-//   */
-//  imageDropHandler?: (image: File) => Promise<string>
-//
-//  /**
-//   * CSS class for the content editable area.
-//   * Defaults to 'prose' (a Tailwind typography utility class).
-//   */
-//  contentEditableClassName?: string
-//
-//  /**
-//   * Callback fired when the markdown content changes.
-//   */
-//  onChange?: (markdown: string) => void
-//
-//  /**
-//   * Whether the editor is read-only.
-//   * Defaults to false.
-//   */
-//  readOnly?: boolean
-//}
-
-type Props = { editorRef?: ForwardedRef<MDXEditorMethods> | null } & MDXEditorProps
-
-// Default Sandpack snippet content
-//const defaultSnippetContent = `
-//export default function App() {
-//  return (
-//    <div className="App">
-//      <h1>Hello CodeSandbox</h1>
-//      <h2>Start editing to see some magic happen!</h2>
-//    </div>
-//  );
-//}
-//`.trim()
-
-// Simple Sandpack configuration for React
-//const simpleSandpackConfig: SandpackConfig = {
-//  defaultPreset: 'react',
-//  presets: [
-//    {
-//      label: 'React',
-//      name: 'react',
-//      meta: 'live react',
-//      sandpackTemplate: 'react',
-//      sandpackTheme: 'light',
-//      snippetFileName: '/App.js',
-//      snippetLanguage: 'jsx',
-//      initialSnippetContent: defaultSnippetContent,
-//    },
-//  ],
-//}
+type Props = {
+  editorRef?: ForwardedRef<MDXEditorMethods> | null
+} & MDXEditorProps
 
 export const MDXEditor = ({
   markdown = '',
   contentEditableClassName,
   onChange,
   readOnly = true,
+  editorRef,
 }: Props) => {
+  const { uploadMdxImage, isUploadingImage, mutate } = useUploadMdxImage()
+
   const toolBarPlugin = toolbarPlugin({
-    toolbarContents: () => {
-      return (
-        <>
-          <UndoRedo />
-          <BoldItalicUnderlineToggles />
-          <InsertFrontmatter />
-          <ConditionalContents
-            options={[
-              {
-                when: (editor) => editor?.editorType === 'codeblock',
-                contents: () => <ChangeCodeMirrorLanguage />,
-              },
-              {
-                when: (editor) => editor?.editorType === 'sandpack',
-                contents: () => <ShowSandpackInfo />,
-              },
-              {
-                fallback: () => (
-                  <>
-                    <InsertCodeBlock />
-                    <InsertSandpack />
-                  </>
-                ),
-              },
-            ]}
-          />
-        </>
-      )
-    },
+    toolbarContents: () => (
+      <>
+        <UndoRedo />
+        <BoldItalicUnderlineToggles />
+        <InsertFrontmatter />
+        <InsertImage />
+        <ConditionalContents
+          options={[
+            {
+              when: (editor) => editor?.editorType === 'codeblock',
+              contents: () => <ChangeCodeMirrorLanguage />,
+            },
+            {
+              when: (editor) => editor?.editorType === 'sandpack',
+              contents: () => <ShowSandpackInfo />,
+            },
+            {
+              fallback: () => (
+                <>
+                  <InsertCodeBlock />
+                  <InsertSandpack />
+                </>
+              ),
+            },
+          ]}
+        />
+      </>
+    ),
   })
+
+  const imageUploadHandler: ImageUploadHandler = async (image) => {
+    try {
+      const response = await uploadMdxImage(image)
+      return response.data.url
+    } catch (error) {
+      console.error(error)
+      return ''
+    }
+  }
 
   const plugins = [
     headingsPlugin(),
@@ -132,7 +92,7 @@ export const MDXEditor = ({
     thematicBreakPlugin(),
     linkPlugin(),
     linkDialogPlugin(),
-    imagePlugin(),
+    imagePlugin({ imageUploadHandler }),
     tablePlugin(),
     markdownShortcutPlugin(),
   ]
@@ -144,17 +104,18 @@ export const MDXEditor = ({
   try {
     return (
       <OGMDXEditor
+        ref={editorRef}
         readOnly={readOnly}
         markdown={markdown}
         plugins={plugins}
-        //contentEditableClassName={cn(
-        //  'prose dark:text-gray-300 rounded-md min-h-[450px]',
-        //  !readOnly && 'border border-gray-300',
-        //  contentEditableClassName
-        //)}
+        className="dark:bg-black bg-white w-full"
         contentEditableClassName={cn(
-          'prose dark:text-gray-300 min-h-screen max-w-3xl mx-auto',
-          !readOnly && 'border border-gray-300 bg-white shadow-sm rounded-lg',
+          'prose',
+          'w-full min-h-screen', // Full width and minimum height
+          'dark:text-gray-200 prose-strong:text-inherit prose-headings:text-inherit  text-gray-900', // Text colors for both modes
+          'px-4 py-6', // Padding
+          !readOnly && 'border dark:border-gray-700 border-gray-200',
+          !readOnly && 'shadow-sm rounded-lg',
           contentEditableClassName
         )}
         onChange={onChange}
@@ -162,6 +123,10 @@ export const MDXEditor = ({
     )
   } catch (error) {
     console.error('Error rendering MDXEditor:', error)
-    return <div>Error loading the editor. Please try again.</div>
+    return (
+      <div className="w-full p-4 text-red-500 dark:text-red-400">
+        Error loading the editor. Please try again.
+      </div>
+    )
   }
 }

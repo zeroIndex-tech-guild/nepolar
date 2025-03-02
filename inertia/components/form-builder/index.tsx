@@ -69,6 +69,7 @@ export const FieldGenerator = (props: FieldGeneratorProps) => {
     case 'select':
       return (
         <FormField
+          key={name}
           control={control}
           name={name}
           render={({ field }) => (
@@ -85,6 +86,7 @@ export const FieldGenerator = (props: FieldGeneratorProps) => {
     case 'mdx':
       return (
         <FormField
+          key={name}
           control={control}
           name={name}
           render={({ field: { value, onChange } }) => (
@@ -108,6 +110,7 @@ export const FieldGenerator = (props: FieldGeneratorProps) => {
       const { label } = props.field as TInputElField
       return (
         <FormField
+          key={name}
           control={control}
           name={name}
           render={({ field: { value, onChange } }) => (
